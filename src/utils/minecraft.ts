@@ -2,20 +2,23 @@ import TcpSocket from "react-native-tcp-socket";
 import { Buffer } from "buffer";
 import MinecraftServer from "~/types/MinecraftServer";
 
-export function query(host: string, port = 25565) {
+export function query(host: string, port = 25565, timeout = 5000) {
 	return new Promise<MinecraftServer>((resolve, reject) => {
+		let ping = -1;
+		const pingStart = Date.now();
+
 		const client = TcpSocket.createConnection(
 			{
 				port: port,
 				host: host,
-				localAddress: "127.0.0.1",
 			},
 			() => {
+				ping = Date.now() - pingStart;
 				client.write(Buffer.from([0xfe, 0x01]));
 			}
 		);
 
-		client.setTimeout(3000);
+		client.setTimeout(timeout);
 
 		client.on("error", (err) => {
 			client.destroy();
@@ -38,6 +41,7 @@ export function query(host: string, port = 25565) {
 					motd: serverInfo[3].replace(/\u0000/g, ""),
 					players: parseInt(serverInfo[4].replace(/\u0000/g, "")),
 					maxPlayers: parseInt(serverInfo[5].replace(/\u0000/g, "")),
+					ping: ping,
 				} as MinecraftServer;
 				resolve(server);
 			} else {
