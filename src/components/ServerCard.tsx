@@ -31,7 +31,7 @@ const ServerCard: React.FC<{ server: Server }> = ({ server }) => {
 				renderRightActions(() => removeServer(server), progress, dragAnimatedValue)
 			}
 		>
-			<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px]">
+			<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] overflow-hidden">
 				{server.type === ServerType.Minecraft ? (
 					<View style={{ width: 48, height: 8 }}>
 						<Svg viewBox="0 10 24 4" width="48" height="8" fill="white">
@@ -45,7 +45,7 @@ const ServerCard: React.FC<{ server: Server }> = ({ server }) => {
 						</Svg>
 					</View>
 				)}
-				<View className="ml-2 pl-2 border-l border-white grow h-full">
+				<View className="ml-2 pl-2 border-l border-white flex-1 h-full">
 					{server.type === ServerType.Minecraft ? (
 						<MinecraftServerInfo
 							displayName={server.displayName}
@@ -74,7 +74,7 @@ const renderLeftActions = (
 ) => {
 	return (
 		<TouchableHighlight onPress={onEditPress}>
-			<Animated.View className="bg-yellow-500 p-2 rounded-md ml-4 mb-4 flex grow justify-center">
+			<Animated.View className="bg-yellow-500 p-2 rounded-md ml-4 mb-4 flex flex-1 justify-center">
 				<Svg
 					width="32"
 					height="32"
@@ -98,7 +98,7 @@ const renderRightActions = (
 ) => {
 	return (
 		<TouchableHighlight onPress={onDeletePress}>
-			<Animated.View className="bg-red-500 p-2 rounded-md mr-4 mb-4 flex grow justify-center">
+			<Animated.View className="bg-red-500 p-2 rounded-md mr-4 mb-4 flex flex-1 justify-center">
 				<Svg
 					width="32"
 					height="32"

@@ -32,7 +32,7 @@ const EditServer: React.FC = () => {
 						<Text className="text-4xl font-bold text-white">
 							<Text className="text-[#a732f5]">
 								{isNew !== undefined && isNew === "true" ? "Add" : "Edit"}
-							</Text>
+							</Text>{" "}
 							Server
 						</Text>
 					),
@@ -53,10 +53,11 @@ const EditServer: React.FC = () => {
 					placeholderTextColor="gray"
 					onChangeText={(text) => setDisplayName(text)}
 					defaultValue={displayName}
+					maxLength={32}
 				/>
 				<View className="flex flex-row mt-3">
 					<TextInput
-						className="bg-[#2f333f] rounded-md p-2 grow mr-3 text-white border border-neutral-500 focus:border-[#a732f5]"
+						className="bg-[#2f333f] rounded-md p-2 flex-1 mr-3 text-white border border-neutral-500 focus:border-[#a732f5]"
 						placeholder="Address"
 						placeholderTextColor="gray"
 						onChangeText={(text) => setAddress(text)}

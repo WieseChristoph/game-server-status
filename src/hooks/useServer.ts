@@ -1,7 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import ServerContext from "~/context/ServerContext";
+import MinecraftServer from "~/types/MinecraftServer";
 import { Server, ServerType } from "~/types/Server";
+import SteamServer from "~/types/SteamServer";
 import { queryMinecraft } from "~/utils/minecraft";
 import { querySteam } from "~/utils/steam";
 
@@ -37,13 +39,37 @@ const useServer = () => {
 		return `${server.address}:${server.port}`;
 	}
 
+	function queryServerData(server: Server) {
+		return new Promise<MinecraftServer | SteamServer>((resolve, reject) => {
+			if (server.type === ServerType.Minecraft) {
+				queryMinecraft(server.address, server.port)
+					.then((data) => resolve(data))
+					.catch((err) => reject(err));
+			} else {
+				querySteam(server.address, server.port)
+					.then((data) => resolve(data))
+					.catch((err) => reject(err));
+			}
+		});
+	}
+
 	async function addServer(server: Server) {
 		await AsyncStorage.setItem(getConnectionString(server), JSON.stringify(server));
+
+		const serverData = await queryServerData(server).catch(console.error);
+		if (!serverData) return;
+		server.data = serverData;
+
 		setServers([...servers, server]);
 	}
 
 	async function editServer(server: Server) {
 		await AsyncStorage.setItem(getConnectionString(server), JSON.stringify(server));
+
+		const serverData = await queryServerData(server).catch(console.error);
+		if (!serverData) return;
+		server.data = serverData;
+
 		setServers(
 			servers.map((item) =>
 				getConnectionString(item) === getConnectionString(server) ? server : item
