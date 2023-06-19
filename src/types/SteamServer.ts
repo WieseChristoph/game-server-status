@@ -1,4 +1,5 @@
 type SteamServer = {
+	ping: number;
 	info: SteamServerInfo;
 	players: SteamServerPlayer;
 };

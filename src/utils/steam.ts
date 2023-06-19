@@ -1,12 +1,13 @@
 import dgram from "react-native-udp";
 import { Buffer } from "buffer";
+import SteamServer from "~/types/SteamServer";
 
 function randomPort() {
 	return (Math.random() * 60536) | (0 + 5000); // 60536-65536
 }
 
 export function querySteam(host: string, port = 27015, timeout = 5000) {
-	return new Promise((resolve, reject) => {
+	return new Promise<SteamServer>((resolve, reject) => {
 		const client = dgram.createSocket({ type: "udp4", debug: true });
 
 		client.bind(randomPort(), (err: Error | undefined) => {

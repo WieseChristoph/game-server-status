@@ -1,25 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Button, FlatList, Text, View } from "react-native";
+import { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
 
-import { queryMinecraft } from "~/utils/minecraft";
-import MinecraftServer from "~/types/MinecraftServer";
+import { FlatList, Text, View } from "react-native";
+import Button from "~/components/Button";
 import RefreshButton from "~/components/RefreshButton";
-import { querySteam } from "~/utils/steam";
+import ServerCard from "~/components/ServerCard";
+import useServer from "~/hooks/useServer";
 
 const Index = () => {
 	const router = useRouter();
-
-	const [data, setData] = useState<MinecraftServer[]>([]);
+	const { servers, refetch } = useServer();
 
 	useEffect(() => {
-		queryMinecraft("192.168.233.50", 25565)
-			.then((res) => setData([...data, res]))
-			.catch(console.error);
-
-		querySteam("127.0.0.1", 27015)
-			.then((res) => console.log(res))
-			.catch(console.error);
+		refetch();
 	}, []);
 
 	return (
@@ -32,42 +25,19 @@ const Index = () => {
 							<Text className="text-[#a732f5]">Game</Text>server Status
 						</Text>
 					),
-					headerRight: () => (
-						<RefreshButton
-							size={30}
-							onPress={() => {
-								queryMinecraft("192.168.233.50", 25565)
-									.then((res) => setData([...data, res]))
-									.catch(console.error);
-								querySteam("127.0.0.1", 27015)
-									.then((res) => console.log(res))
-									.catch(console.error);
-							}}
-						/>
-					),
+					headerRight: () => <RefreshButton size={30} onPress={() => refetch()} />,
 				}}
 			/>
-			<View className="h-full w-full p-4">
-				<View className="mb-4">
+			<View className="h-full w-full">
+				<View className="m-4">
 					<Button
-						title="Add Server"
-						color={"#a732f5"}
+						text="Add Server"
+						textClassName=""
 						onPress={() => router.push({ pathname: "/editServer", params: { isNew: true } })}
 					/>
 				</View>
 
-				<FlatList
-					data={data}
-					renderItem={({ item }) => (
-						<View className="border border-white">
-							<Text className="text-green-600 text-center">{`${item.host}:${item.port}`}</Text>
-							<Text className="text-green-600 text-center">{`${item.players}/${item.maxPlayers}`}</Text>
-							<Text className="text-green-600 text-center">{item.version}</Text>
-							<Text className="text-green-600 text-center">{item.motd}</Text>
-							<Text className="text-green-600 text-center">{item.ping}ms</Text>
-						</View>
-					)}
-				/>
+				<FlatList data={servers} renderItem={({ item }) => <ServerCard server={item} />} />
 			</View>
 		</View>
 	);

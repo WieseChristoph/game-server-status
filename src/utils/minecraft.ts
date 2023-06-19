@@ -35,8 +35,6 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 			if (data != null && data != "") {
 				const serverInfo = data.toString().split("\x00\x00\x00");
 				const server = {
-					host: host,
-					port: port,
 					version: serverInfo[2].replace(/\u0000/g, ""),
 					motd: serverInfo[3].replace(/\u0000/g, ""),
 					players: parseInt(serverInfo[4].replace(/\u0000/g, "")),
