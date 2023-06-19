@@ -1,54 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { Button, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Stack } from "expo-router";
+import { Button, FlatList, Text, View } from "react-native";
+import { Stack, useRouter } from "expo-router";
 
-import { query } from "~/utils/minecraft";
+import { queryMinecraft } from "~/utils/minecraft";
 import MinecraftServer from "~/types/MinecraftServer";
 import RefreshButton from "~/components/RefreshButton";
+import { querySteam } from "~/utils/steam";
 
 const Index = () => {
-	const [data, setData] = useState<MinecraftServer>();
+	const router = useRouter();
+
+	const [data, setData] = useState<MinecraftServer[]>([]);
 
 	useEffect(() => {
-		query("192.168.233.50", 25565)
-			.then((res) => setData(res))
+		queryMinecraft("192.168.233.50", 25565)
+			.then((res) => setData([...data, res]))
+			.catch(console.error);
+
+		querySteam("127.0.0.1", 27015)
+			.then((res) => console.log(res))
 			.catch(console.error);
 	}, []);
 
 	return (
-		<SafeAreaView className="bg-[#1F104A]">
+		<View className="bg-[#1d2029]">
 			{/* Changes page title visible on the header */}
-			<Stack.Screen options={{ title: "Server List" }} />
+			<Stack.Screen
+				options={{
+					headerTitle: () => (
+						<Text className="text-4xl font-bold text-white">
+							<Text className="text-[#a732f5]">Game</Text>server Status
+						</Text>
+					),
+					headerRight: () => (
+						<RefreshButton
+							size={30}
+							onPress={() => {
+								queryMinecraft("192.168.233.50", 25565)
+									.then((res) => setData([...data, res]))
+									.catch(console.error);
+								querySteam("127.0.0.1", 27015)
+									.then((res) => console.log(res))
+									.catch(console.error);
+							}}
+						/>
+					),
+				}}
+			/>
 			<View className="h-full w-full p-4">
-				<Text className="mx-auto pb-2 text-4xl font-bold text-white">
-					<Text className="text-pink-400">Game</Text>server Status
-				</Text>
+				<View className="mb-4">
+					<Button
+						title="Add Server"
+						color={"#a732f5"}
+						onPress={() => router.push({ pathname: "/editServer", params: { isNew: true } })}
+					/>
+				</View>
 
-				<RefreshButton
-					textClassName="ml-auto"
-					onPress={() =>
-						query("192.168.233.50", 25565)
-							.then((res) => setData(res))
-							.catch(console.error)
-					}
+				<FlatList
+					data={data}
+					renderItem={({ item }) => (
+						<View className="border border-white">
+							<Text className="text-green-600 text-center">{`${item.host}:${item.port}`}</Text>
+							<Text className="text-green-600 text-center">{`${item.players}/${item.maxPlayers}`}</Text>
+							<Text className="text-green-600 text-center">{item.version}</Text>
+							<Text className="text-green-600 text-center">{item.motd}</Text>
+							<Text className="text-green-600 text-center">{item.ping}ms</Text>
+						</View>
+					)}
 				/>
-
-				<Button title="Add Server" color={"#f472b6"} />
-
-				{data ? (
-					<View className="border border-white">
-						<Text className="text-green-600 text-center">{`${data.host}:${data.port}`}</Text>
-						<Text className="text-green-600 text-center">{`${data.players}/${data.maxPlayers}`}</Text>
-						<Text className="text-green-600 text-center">{data.version}</Text>
-						<Text className="text-green-600 text-center">{data.motd}</Text>
-						<Text className="text-green-600 text-center">{data.ping}ms</Text>
-					</View>
-				) : (
-					<Text className="text-red-600 text-center">Server is offline</Text>
-				)}
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 };
 

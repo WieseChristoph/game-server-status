@@ -2,7 +2,7 @@ import TcpSocket from "react-native-tcp-socket";
 import { Buffer } from "buffer";
 import MinecraftServer from "~/types/MinecraftServer";
 
-export function query(host: string, port = 25565, timeout = 5000) {
+export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 	return new Promise<MinecraftServer>((resolve, reject) => {
 		let ping = -1;
 		const pingStart = Date.now();
