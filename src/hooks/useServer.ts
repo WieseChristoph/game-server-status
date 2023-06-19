@@ -57,8 +57,7 @@ const useServer = () => {
 		await AsyncStorage.setItem(getConnectionString(server), JSON.stringify(server));
 
 		const serverData = await queryServerData(server).catch(console.error);
-		if (!serverData) return;
-		server.data = serverData;
+		if (serverData) server.data = serverData;
 
 		setServers([...servers, server]);
 	}
@@ -67,8 +66,7 @@ const useServer = () => {
 		await AsyncStorage.setItem(getConnectionString(server), JSON.stringify(server));
 
 		const serverData = await queryServerData(server).catch(console.error);
-		if (!serverData) return;
-		server.data = serverData;
+		if (serverData) server.data = serverData;
 
 		setServers(
 			servers.map((item) =>
