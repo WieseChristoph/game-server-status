@@ -6,6 +6,7 @@ import Button from "~/components/Button";
 import RefreshButton from "~/components/RefreshButton";
 import ServerCard from "~/components/ServerCard";
 import useServer from "~/hooks/useServer";
+import GitHubButton from "~/components/GitHubButton";
 
 const Index = () => {
 	const router = useRouter();
@@ -20,11 +21,13 @@ const Index = () => {
 			{/* Changes page title visible on the header */}
 			<Stack.Screen
 				options={{
+					headerLeft: () => <GitHubButton size={30} />,
 					headerTitle: () => (
-						<Text className="text-4xl font-bold text-white">
+						<Text className="text-3xl font-bold text-white">
 							<Text className="text-[#a732f5]">Game</Text>server Status
 						</Text>
 					),
+					headerTitleAlign: "center",
 					headerRight: () => <RefreshButton size={30} onPress={() => refetch()} />,
 				}}
 			/>

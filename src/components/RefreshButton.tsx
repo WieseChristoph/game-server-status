@@ -9,7 +9,7 @@ const RefreshButton: React.FC<{
 	color?: string;
 	strokeWidth?: number;
 	textClassName?: string;
-}> = ({ onPress, size = 24, color = "white", strokeWidth = 2, textClassName }) => {
+}> = ({ onPress, size = 24, color = "white", strokeWidth = 2, textClassName = "" }) => {
 	const spinValue = useRef(new Animated.Value(0)).current;
 
 	const rotation = spinValue.interpolate({
@@ -26,16 +26,14 @@ const RefreshButton: React.FC<{
 
 	return (
 		<TouchableHighlight
+			className={textClassName}
 			onPress={() => {
 				spinAnim.reset();
 				onPress();
 				spinAnim.start();
 			}}
 		>
-			<Animated.View
-				style={{ width: size, height: size, transform: [{ rotate: rotation }] }}
-				className={textClassName}
-			>
+			<Animated.View style={{ width: size, height: size, transform: [{ rotate: rotation }] }}>
 				<Svg
 					width={size}
 					height={size}
