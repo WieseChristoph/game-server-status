@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ServerType } from "~/types/Server";
 import useServer from "~/hooks/useServer";
+import Toast from "react-native-root-toast";
 
 import { View, Text, TextInput } from "react-native";
 import Button from "~/components/Button";
@@ -10,7 +11,7 @@ import ServerTypeSelector from "~/components/ServerTypeSelector";
 const EditServer: React.FC = () => {
 	const router = useRouter();
 	const { isNew, server } = useLocalSearchParams();
-	const { servers, addServer, editServer, getConnectionString } = useServer();
+	const { servers, setServer, getConnectionString } = useServer();
 
 	const serverToEdit = servers.find((s) => getConnectionString(s) === server);
 
@@ -77,15 +78,13 @@ const EditServer: React.FC = () => {
 				<View className="mt-4">
 					<Button
 						text="Save"
-						onPress={() => {
-							serverToEdit
-								? editServer({ displayName, address, port, type: serverType })
-										.then(() => router.push("/"))
-										.catch(console.error)
-								: addServer({ displayName, address, port, type: serverType })
-										.then(() => router.push("/"))
-										.catch(console.error);
-						}}
+						onPress={() =>
+							setServer({ displayName, address, port, type: serverType })
+								.then(() => router.push("/"))
+								.catch((err: Error) =>
+									Toast.show(err.message, { duration: 5000, backgroundColor: "red" })
+								)
+						}
 					/>
 				</View>
 			</View>

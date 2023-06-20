@@ -45,5 +45,7 @@ export function querySteam(host: string, port = 27015, timeout = 5000) {
 				}
 			);
 		});
+
+		reject(new Error("Steam query not implemented yet"));
 	});
 }
