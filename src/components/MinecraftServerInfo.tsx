@@ -1,12 +1,14 @@
 import { View, Text } from "react-native";
 import MinecraftServer from "~/types/MinecraftServer";
+import { formatMinecraftMotd } from "~/utils/minecraft";
 
 const MinecraftServerInfo: React.FC<{
 	displayName?: string;
 	address: string;
 	port: number;
 	data?: MinecraftServer;
-}> = ({ displayName, address, port, data }) => {
+	error?: string;
+}> = ({ displayName, address, port, data, error }) => {
 	return (
 		<>
 			<View className="flex flex-row">
@@ -28,7 +30,7 @@ const MinecraftServerInfo: React.FC<{
 				</>
 			) : (
 				<View className="flex justify-center flex-1">
-					<Text className="text-red-500 text-center text-2xl font-bold">Offline</Text>
+					<Text className="text-red-500 text-center font-bold">{error}</Text>
 				</View>
 			)}
 		</>

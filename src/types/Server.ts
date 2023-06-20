@@ -12,4 +12,5 @@ export type Server = {
 	address: string;
 	port: number;
 	data?: MinecraftServer | SteamServer;
+	error?: string;
 };

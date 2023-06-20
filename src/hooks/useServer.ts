@@ -18,18 +18,15 @@ const useServer = () => {
 		for (const server of storedServers) {
 			if (server[1] === null) continue;
 
-			const serverData = JSON.parse(server[1]) as Server;
+			const newServer = JSON.parse(server[1]) as Server;
 			try {
-				if (serverData.type === ServerType.Minecraft) {
-					serverData.data = await queryMinecraft(serverData.address, serverData.port);
-				} else {
-					serverData.data = await querySteam(serverData.address, serverData.port);
-				}
+				newServer.data = await queryServerData(newServer);
 			} catch (err) {
-				console.error(err);
+				if (err instanceof Error) newServer.error = err.message;
+				else newServer.error = String(err);
 			}
 
-			newServers.push(serverData);
+			newServers.push(newServer);
 		}
 
 		setServers(newServers);
@@ -53,24 +50,32 @@ const useServer = () => {
 		});
 	}
 
-	async function addServer(server: Server) {
-		await AsyncStorage.setItem(getConnectionString(server), JSON.stringify(server));
+	async function addServer(newServer: Server) {
+		await AsyncStorage.setItem(getConnectionString(newServer), JSON.stringify(newServer));
 
-		const serverData = await queryServerData(server).catch(console.error);
-		if (serverData) server.data = serverData;
+		try {
+			newServer.data = await queryServerData(newServer);
+		} catch (err) {
+			if (err instanceof Error) newServer.error = err.message;
+			else newServer.error = String(err);
+		}
 
-		setServers([...servers, server]);
+		setServers([...servers, newServer]);
 	}
 
-	async function editServer(server: Server) {
-		await AsyncStorage.setItem(getConnectionString(server), JSON.stringify(server));
+	async function editServer(editedServer: Server) {
+		await AsyncStorage.setItem(getConnectionString(editedServer), JSON.stringify(editedServer));
 
-		const serverData = await queryServerData(server).catch(console.error);
-		if (serverData) server.data = serverData;
+		try {
+			editedServer.data = await queryServerData(editedServer);
+		} catch (err) {
+			if (err instanceof Error) editedServer.error = err.message;
+			else editedServer.error = String(err);
+		}
 
 		setServers(
 			servers.map((item) =>
-				getConnectionString(item) === getConnectionString(server) ? server : item
+				getConnectionString(item) === getConnectionString(editedServer) ? editedServer : item
 			)
 		);
 	}

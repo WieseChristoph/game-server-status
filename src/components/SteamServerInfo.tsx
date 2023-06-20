@@ -7,7 +7,8 @@ const SteamServerInfo: React.FC<{
 	address: string;
 	port: number;
 	data?: SteamServer;
-}> = ({ displayName, address, port, data }) => {
+	error?: string;
+}> = ({ displayName, address, port, data, error }) => {
 	return (
 		<>
 			<View className="flex flex-row">
@@ -28,7 +29,7 @@ const SteamServerInfo: React.FC<{
 				</>
 			) : (
 				<View className="flex justify-center flex-1">
-					<Text className="text-red-500 text-center text-2xl font-bold">Offline</Text>
+					<Text className="text-red-500 text-center text-2xl font-bold">{error}</Text>
 				</View>
 			)}
 		</>

@@ -52,6 +52,7 @@ const ServerCard: React.FC<{ server: Server }> = ({ server }) => {
 							address={server.address}
 							port={server.port}
 							data={server.data as MinecraftServer}
+							error={server.error}
 						/>
 					) : (
 						<SteamServerInfo
@@ -59,6 +60,7 @@ const ServerCard: React.FC<{ server: Server }> = ({ server }) => {
 							address={server.address}
 							port={server.port}
 							data={server.data as SteamServer}
+							error={server.error}
 						/>
 					)}
 				</View>
