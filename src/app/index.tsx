@@ -7,6 +7,7 @@ import RefreshButton from "~/components/RefreshButton";
 import ServerCard from "~/components/ServerCard";
 import useServer from "~/hooks/useServer";
 import GitHubButton from "~/components/GitHubButton";
+import LoadingIcon from "~/components/LoadingIcon";
 
 const Index = () => {
 	const router = useRouter();
@@ -40,11 +41,15 @@ const Index = () => {
 					/>
 				</View>
 
-				<FlatList
-					data={servers}
-					renderItem={({ item }) => <ServerCard server={item} />}
-					keyExtractor={(item) => getConnectionString(item)}
-				/>
+				{servers !== null ? (
+					<FlatList
+						data={servers}
+						renderItem={({ item }) => <ServerCard server={item} />}
+						keyExtractor={(item) => getConnectionString(item)}
+					/>
+				) : (
+					<LoadingIcon size={64} textClassName="self-center mt-4" />
+				)}
 			</View>
 		</View>
 	);

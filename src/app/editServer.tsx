@@ -13,7 +13,7 @@ const EditServer: React.FC = () => {
 	const { isNew, server } = useLocalSearchParams();
 	const { servers, setServer, getConnectionString } = useServer();
 
-	const serverToEdit = servers.find((s) => getConnectionString(s) === server);
+	const serverToEdit = servers?.find((s) => getConnectionString(s) === server);
 
 	const [serverType, setServerType] = useState<ServerType>(
 		serverToEdit ? serverToEdit.type : ServerType.Minecraft
