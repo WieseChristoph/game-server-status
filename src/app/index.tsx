@@ -10,7 +10,7 @@ import GitHubButton from "~/components/GitHubButton";
 
 const Index = () => {
 	const router = useRouter();
-	const { servers, refetch } = useServer();
+	const { servers, refetch, getConnectionString } = useServer();
 
 	useEffect(() => {
 		refetch();
@@ -40,7 +40,11 @@ const Index = () => {
 					/>
 				</View>
 
-				<FlatList data={servers} renderItem={({ item }) => <ServerCard server={item} />} />
+				<FlatList
+					data={servers}
+					renderItem={({ item }) => <ServerCard server={item} />}
+					keyExtractor={(item) => getConnectionString(item)}
+				/>
 			</View>
 		</View>
 	);
