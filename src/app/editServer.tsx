@@ -63,12 +63,13 @@ const EditServer: React.FC = () => {
 						placeholderTextColor="gray"
 						onChangeText={(text) => setAddress(text)}
 						defaultValue={address}
+						autoCorrect={false}
 					/>
 					<TextInput
 						className="bg-[#2f333f] rounded-md p-2 text-white border border-neutral-500 focus:border-[#a732f5] w-1/5"
 						placeholder="Port"
 						placeholderTextColor="gray"
-						keyboardType="numeric"
+						inputMode="numeric"
 						maxLength={5}
 						onChangeText={(text) => setPort(parseInt(text))}
 						defaultValue={port >= 0 ? port.toString() : ""}
