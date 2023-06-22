@@ -7,6 +7,7 @@ export enum ServerType {
 }
 
 export type Server = {
+	position: number;
 	type: ServerType;
 	displayName: string;
 	address: string;

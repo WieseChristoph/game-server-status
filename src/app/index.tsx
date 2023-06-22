@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
 
-import { FlatList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Button from "~/components/Button";
 import RefreshButton from "~/components/RefreshButton";
 import ServerCard from "~/components/ServerCard";
 import useServer from "~/hooks/useServer";
 import GitHubButton from "~/components/GitHubButton";
 import LoadingIcon from "~/components/LoadingIcon";
+import DraggableFlatList from "react-native-draggable-flatlist";
 
 const Index = () => {
 	const router = useRouter();
-	const { servers, refetch, getConnectionString } = useServer();
+	const { servers, refetch, setPosition, getConnectionString } = useServer();
 
 	useEffect(() => {
 		refetch();
@@ -42,10 +43,14 @@ const Index = () => {
 				</View>
 
 				{servers !== null ? (
-					<FlatList
+					<DraggableFlatList
 						data={servers}
-						renderItem={({ item }) => <ServerCard server={item} />}
+						onDragEnd={({ data, from, to }) => setPosition(from, to)}
+						renderItem={ServerCard}
 						keyExtractor={(item) => getConnectionString(item)}
+						renderPlaceholder={() => (
+							<View className="bg-[#2f333f] shadow-lg shadow-black rounded-md mx-4 mb-4 items-center h-[125px]" />
+						)}
 					/>
 				) : (
 					<LoadingIcon size={64} textClassName="self-center mt-4" />
