@@ -33,9 +33,12 @@ const MinecraftServerInfo: React.FC<{
 					</Text>
 				</>
 			) : (
-				<View className="flex justify-center flex-1">
-					<Text className="text-red-500 text-center font-bold">{error}</Text>
-				</View>
+				<>
+					<Text className="text-neutral-400 text-xs">{`${address}:${port}`}</Text>
+					<View className="flex justify-center flex-1">
+						<Text className="text-red-500 text-center font-bold">{error}</Text>
+					</View>
+				</>
 			)}
 		</>
 	);
