@@ -80,7 +80,10 @@ const EditServer: React.FC = () => {
 					<Button
 						text="Save"
 						onPress={() =>
-							setServer({ displayName, address, port, type: serverType })
+							setServer(
+								{ displayName, address, port, type: serverType },
+								isNew === undefined || isNew === "false"
+							)
 								.then(() => router.push("/"))
 								.catch((err: Error) =>
 									Toast.show(err.message, { duration: 5000, backgroundColor: "red" })

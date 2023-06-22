@@ -1,34 +1,46 @@
+import useServer from "~/hooks/useServer";
+import { useRouter } from "expo-router";
+import { useRef } from "react";
+
 import { View, Animated, TouchableHighlight, Image } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Svg, { Line, Path } from "react-native-svg";
-import useServer from "~/hooks/useServer";
-
 import MinecraftServer from "~/types/MinecraftServer";
 import { Server, ServerType } from "~/types/Server";
 import SteamServer from "~/types/SteamServer";
 import MinecraftServerInfo from "./MinecraftServerInfo";
 import SteamServerInfo from "./SteamServerInfo";
-import { useRouter } from "expo-router";
 
 const ServerCard: React.FC<{ server: Server }> = ({ server }) => {
 	const router = useRouter();
 	const { removeServer, getConnectionString } = useServer();
+	const swipeableRef = useRef<Swipeable>(null);
 
 	return (
 		<Swipeable
+			ref={swipeableRef}
 			renderLeftActions={(progress, dragAnimatedValue) =>
 				renderLeftActions(
-					() =>
+					() => {
 						router.push({
 							pathname: "/editServer",
 							params: { server: getConnectionString(server) },
-						}),
+						});
+						swipeableRef.current?.close();
+					},
 					progress,
 					dragAnimatedValue
 				)
 			}
 			renderRightActions={(progress, dragAnimatedValue) =>
-				renderRightActions(() => removeServer(server), progress, dragAnimatedValue)
+				renderRightActions(
+					() => {
+						removeServer(server);
+						swipeableRef.current?.close();
+					},
+					progress,
+					dragAnimatedValue
+				)
 			}
 		>
 			<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] overflow-hidden">

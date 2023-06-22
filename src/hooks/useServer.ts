@@ -50,8 +50,9 @@ const useServer = () => {
 		setServers(newServers);
 	}
 
-	async function setServer(newServer: Server) {
-		if ((await AsyncStorage.getItem(getConnectionString(newServer))) !== null)
+	async function setServer(newServer: Server, isEdit = false) {
+		newServer.address = newServer.address.toLocaleLowerCase();
+		if (!isEdit && (await AsyncStorage.getItem(getConnectionString(newServer))) !== null)
 			throw new Error("A Server with this address already exists");
 
 		await AsyncStorage.setItem(getConnectionString(newServer), JSON.stringify(newServer));
