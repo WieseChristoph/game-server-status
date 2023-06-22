@@ -78,6 +78,11 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 		});
 
 		client.on("close", () => {
+			if (fullData.length === 0) {
+				reject(new Error("No data received"));
+				return;
+			}
+
 			const serverInfo = JSON.parse(fullData.slice(fullData.indexOf("{"))) as MinecraftServer;
 			serverInfo.ping = ping;
 			resolve(serverInfo);
