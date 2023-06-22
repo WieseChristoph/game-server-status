@@ -52,8 +52,12 @@ const useServer = () => {
 
 	async function setServer(newServer: Server, isEdit = false) {
 		newServer.address = newServer.address.toLocaleLowerCase();
+
 		if (!isEdit && (await AsyncStorage.getItem(getConnectionString(newServer))) !== null)
 			throw new Error("A Server with this address already exists");
+		if (newServer.address.length === 0) throw new Error("Address cannot be empty");
+		if (newServer.port < 0 || isNaN(newServer.port))
+			throw new Error("Port cannot be empty or negative");
 
 		await AsyncStorage.setItem(getConnectionString(newServer), JSON.stringify(newServer));
 
