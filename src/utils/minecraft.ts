@@ -1,6 +1,7 @@
 import TcpSocket from "react-native-tcp-socket";
 import { Buffer } from "buffer";
 import MinecraftServer from "~/types/MinecraftServer";
+import { readVarInt } from "./helper";
 
 export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 	return new Promise<MinecraftServer>((resolve, reject) => {
@@ -14,7 +15,34 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 			},
 			() => {
 				ping = Date.now() - pingStart;
-				client.write(Buffer.from([0xfe, 0x01]));
+
+				const hostHexArray = Buffer.from(host, "utf8")
+					.toString("hex")
+					.match(/.{1,2}/g)
+					?.map((hex) => `0x${hex.padStart(2, "0")}`);
+
+				const portHexArray = port
+					.toString(16)
+					.match(/.{1,2}/g)
+					?.map((hex) => `0x${hex.padStart(2, "0")}`);
+
+				const buffer = Buffer.from(
+					[
+						// https://wiki.vg/Protocol#Handshaking
+						`0x${(6 + host.length).toString(16)}`, // length of packet id + data
+						0x00, // packet id
+						0x04, // protocol version
+						`0x${host.length.toString(16).padStart(2, "0")}`, // host length
+						hostHexArray, // host
+						portHexArray, // port
+						0x01, // next state: status
+						// https://wiki.vg/Protocol#Status
+						0x01,
+						0x00,
+					].flat()
+				);
+
+				client.write(buffer);
 			}
 		);
 
@@ -22,6 +50,7 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 
 		client.on("error", (err) => {
 			client.destroy();
+
 			reject(err);
 		});
 
@@ -30,21 +59,28 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 			reject(new Error("Timeout"));
 		});
 
+		let bytesToRead = -1;
+		let dataLengthIntSize = -1;
+		let fullData = "";
+
 		client.on("data", (data) => {
-			client.destroy();
-			if (data != null && data != "") {
-				const serverInfo = data.toString().split("\x00\x00\x00");
-				const server = {
-					version: serverInfo[2].replace(/\u0000/g, ""),
-					motd: serverInfo[3].replace(/\u0000/g, ""),
-					players: parseInt(serverInfo[4].replace(/\u0000/g, "")),
-					maxPlayers: parseInt(serverInfo[5].replace(/\u0000/g, "")),
-					ping: ping,
-				} as MinecraftServer;
-				resolve(server);
-			} else {
-				reject(new Error("No data received"));
+			if (bytesToRead === -1) {
+				const { value, length } = readVarInt(data as Buffer);
+				bytesToRead = value;
+				dataLengthIntSize = length;
 			}
+
+			fullData += data.toString();
+
+			if (client.bytesRead >= bytesToRead) {
+				client.destroy();
+			}
+		});
+
+		client.on("close", () => {
+			const serverInfo = JSON.parse(fullData.slice(fullData.indexOf("{"))) as MinecraftServer;
+			serverInfo.ping = ping;
+			resolve(serverInfo);
 		});
 	});
 }
