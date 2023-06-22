@@ -78,6 +78,12 @@ function motdStringToJsx(motd: string) {
 				case "o":
 					italic = true;
 					break;
+				case "r":
+					color = "#FFFFFF";
+					bold = false;
+					italic = false;
+					underlined = false;
+					strikethrough = false;
 				default:
 					color = getHexColor(part[1]);
 			}
@@ -85,6 +91,7 @@ function motdStringToJsx(motd: string) {
 		} else
 			return (
 				<Text
+					key={i}
 					style={{
 						color: color,
 						fontWeight: bold ? "bold" : "normal",
@@ -112,8 +119,9 @@ const MinecraftMotd: React.FC<{ motd: string | MinecraftServerDescription }> = (
 	else
 		return (
 			<>
-				{motd.extra.map((part) => (
+				{motd.extra.map((part, i) => (
 					<Text
+						key={i}
 						style={{
 							color: getHexColor(part.color),
 							fontWeight: part.bold ? "bold" : "normal",
