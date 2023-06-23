@@ -1,6 +1,11 @@
-# Game Server Status
-
-App to monitor the status of Minecraft and Steam servers.
+<div align="center">
+  <h1 style="display: flex; align-items: center; justify-content: center">
+    <img src="assets/adaptive-icon.png" width="75px" height="75px" />
+    <span style="color: #a732f5">Game</span>&nbsp;Server Status
+  </h1>
+  <p>A simple app to monitor the status of Minecraft and Steam servers.</p>
+</div>
+<hr>
 
 # Data protection
 
