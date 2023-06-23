@@ -13,25 +13,33 @@ const SteamServerInfo: React.FC<{
 	return (
 		<>
 			<View className="flex flex-row">
-				<Text className="text-white text-xl font-bold flex-1">{displayName ?? "Unnamed"}</Text>
-				<Text className="text-white text-xl font-bold">{`${data?.info.players ?? 0}/${
-					data?.info.maxPlayers ?? 0
+				<Text className="text-white text-xl font-bold flex-1 break-words">
+					{displayName ?? "Unnamed"}
+				</Text>
+				<Text className="text-white text-xl font-bold">{`${data?.players ?? 0}/${
+					data?.maxPlayers ?? 0
 				}`}</Text>
 			</View>
 			{data ? (
 				<>
 					<View className="flex flex-row">
 						<Text className="text-neutral-400 text-xs flex-1">{`${address}:${port}`}</Text>
-						<Text className="text-white">{data?.info.game}</Text>
+						<Text className="text-white">{data.game}</Text>
 					</View>
-					<Text className="text-neutral-400 text-xs">{data && data?.ping + "ms"}</Text>
+					<View className="flex flex-row">
+						<Text className="text-neutral-400 text-xs flex-1">{data.ping + "ms"}</Text>
+						<Text className="text-white">{data.map}</Text>
+					</View>
 
-					<Text className="text-white text-center p-2">{data.info.name}</Text>
+					<Text className="text-white text-center p-2">{data.name}</Text>
 				</>
 			) : (
-				<View className="flex justify-center flex-1">
-					<Text className="text-red-500 text-center text-2xl font-bold">{error}</Text>
-				</View>
+				<>
+					<Text className="text-neutral-400 text-xs">{`${address}:${port}`}</Text>
+					<View className="flex justify-center flex-1">
+						<Text className="text-red-500 text-center font-bold">{error}</Text>
+					</View>
+				</>
 			)}
 		</>
 	);

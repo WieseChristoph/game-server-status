@@ -25,9 +25,9 @@ const MinecraftServerInfo: React.FC<{
 					<View className="flex flex-row">
 						<View className="flex-1">
 							<Text className="text-neutral-400 text-xs flex-1">{`${address}:${port}`}</Text>
-							<Text className="text-neutral-400 text-xs flex-1">{data && data?.ping + "ms"}</Text>
+							<Text className="text-neutral-400 text-xs flex-1">{data.ping + "ms"}</Text>
 						</View>
-						<Text className="text-white text-right">{data?.version.name.replace(" ", "\n")}</Text>
+						<Text className="text-white text-right">{data.version.name.replace(" ", "\n")}</Text>
 					</View>
 					<Text className="text-white text-center p-2">
 						<MinecraftMotd motd={data.description} />

@@ -8,7 +8,7 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 		let ping = -1;
 		const pingStart = Date.now();
 
-		const client = TcpSocket.createConnection(
+		const socket = TcpSocket.createConnection(
 			{
 				port: port,
 				host: host,
@@ -26,7 +26,7 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 					.match(/.{1,2}/g)
 					?.map((hex) => `0x${hex.padStart(2, "0")}`);
 
-				const buffer = Buffer.from(
+				const statusRequestBuffer = Buffer.from(
 					[
 						// https://wiki.vg/Protocol#Handshaking
 						`0x${(6 + host.length).toString(16)}`, // length of packet id + data
@@ -42,27 +42,27 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 					].flat()
 				);
 
-				client.write(buffer);
+				socket.write(statusRequestBuffer);
 			}
 		);
 
-		client.setTimeout(timeout);
+		socket.setTimeout(timeout);
 
-		client.on("error", (err) => {
-			client.destroy();
+		socket.on("error", (err) => {
+			socket.destroy();
 
 			reject(err);
 		});
 
-		client.on("timeout", () => {
-			client.destroy();
+		socket.on("timeout", () => {
+			socket.destroy();
 			reject(new Error("Timeout"));
 		});
 
 		let bytesToRead = -1;
 		let fullData = "";
 
-		client.on("data", (data) => {
+		socket.on("data", (data) => {
 			if (bytesToRead === -1) {
 				const { value } = readVarInt(data as Buffer);
 				bytesToRead = value;
@@ -70,12 +70,12 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 
 			fullData += data.toString();
 
-			if (client.bytesRead >= bytesToRead) {
-				client.destroy();
+			if (socket.bytesRead >= bytesToRead) {
+				socket.destroy();
 			}
 		});
 
-		client.on("close", () => {
+		socket.on("close", () => {
 			if (fullData.length === 0) {
 				reject(new Error("No data received"));
 				return;
