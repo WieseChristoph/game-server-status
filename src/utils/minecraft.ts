@@ -29,13 +29,13 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 				const statusRequestBuffer = Buffer.from(
 					[
 						// https://wiki.vg/Protocol#Handshaking
-						`0x${(6 + host.length).toString(16)}`, // length of packet id + data
-						0x00, // packet id
-						0x04, // protocol version
-						`0x${host.length.toString(16).padStart(2, "0")}`, // host length
-						hostHexArray, // host
-						portHexArray, // port
-						0x01, // next state: status
+						`0x${(6 + host.length).toString(16)}`, // Length of packet id + data
+						0x00, // Packet id
+						0x04, // Protocol version
+						`0x${host.length.toString(16).padStart(2, "0")}`, // Host length
+						hostHexArray, // Host
+						portHexArray, // Port
+						0x01, // Next state: status
 						// https://wiki.vg/Protocol#Status
 						0x01,
 						0x00,

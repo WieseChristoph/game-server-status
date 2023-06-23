@@ -1,3 +1,4 @@
+// https://developer.valvesoftware.com/wiki/Server_queries#Response_Format
 export type SteamServer = {
 	ping: number;
 	protocol: number;

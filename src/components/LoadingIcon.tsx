@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing } from "react-native";
+
 import Svg, { Path } from "react-native-svg";
 
 const LoadingIcon: React.FC<{ size?: number; color?: string; textClassName?: string }> = ({

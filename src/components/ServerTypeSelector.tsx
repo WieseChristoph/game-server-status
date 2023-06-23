@@ -1,8 +1,8 @@
 import React from "react";
+import { ServerType } from "~/types/Server";
+
 import { TouchableHighlight, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-
-import { ServerType } from "~/types/Server";
 
 const ServerTypeSelector: React.FC<{
 	textClassName?: string;

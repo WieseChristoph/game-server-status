@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Text } from "react-native";
 import { MinecraftServerDescription } from "~/types/MinecraftServer";
 
@@ -66,6 +67,7 @@ function motdStringToJsx(motd: string) {
 
 	return motd.split(/(§[0-9a-fk-or])/g).map((part, i) => {
 		if (part.startsWith("§")) {
+			// Check for text style and color codes
 			switch (part.slice(1)) {
 				case "l":
 					bold = true;
