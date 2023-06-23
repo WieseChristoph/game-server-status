@@ -98,11 +98,14 @@ const useServer = () => {
 	async function setPosition(oldPosition: number, newPosition: number) {
 		if (!servers) return;
 
+		const server = servers.find((s) => s.position === oldPosition);
+		if (!server) return;
+
 		const newServers = [...servers];
 		for (const s of newServers) {
 			let changed = false;
 
-			if (s.position === oldPosition) {
+			if (s.id === server.id) {
 				// If the server is the one we're moving, set it to the new position
 				s.position = newPosition;
 				changed = true;
