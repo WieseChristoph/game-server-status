@@ -12,20 +12,6 @@ import { querySteam } from "~/utils/steam";
 const useServer = () => {
 	const { servers, setServers } = useContext(ServerContext);
 
-	function queryServerData(server: Server) {
-		return new Promise<MinecraftServer | SteamServer>((resolve, reject) => {
-			if (server.type === ServerType.Minecraft) {
-				queryMinecraft(server.address, server.port)
-					.then((data) => resolve(data))
-					.catch((err) => reject(err));
-			} else {
-				querySteam(server.address, server.port)
-					.then((data) => resolve(data))
-					.catch((err) => reject(err));
-			}
-		});
-	}
-
 	async function fetchAllServers() {
 		const keys = await AsyncStorage.getAllKeys();
 		const storedServers = await AsyncStorage.multiGet(keys);
@@ -35,12 +21,7 @@ const useServer = () => {
 			if (server[1] === null) continue;
 
 			const newServer = JSON.parse(server[1]) as Server;
-			try {
-				newServer.data = await queryServerData(newServer);
-			} catch (err) {
-				if (err instanceof Error) newServer.error = err.message;
-				else newServer.error = String(err);
-			}
+			queryServerData(newServer);
 
 			newServers.push(newServer);
 		}
@@ -48,6 +29,31 @@ const useServer = () => {
 		newServers.sort((a, b) => a.position - b.position);
 
 		setServers(newServers);
+	}
+
+	async function queryServerData(server: Server) {
+		if (server.type === ServerType.Minecraft) {
+			queryMinecraft(server.address, server.port)
+				.then((data) => setServerData(server, data))
+				.catch((err) =>
+					setServerData(server, undefined, err instanceof Error ? err.message : String(err))
+				);
+		} else {
+			querySteam(server.address, server.port)
+				.then((data) => setServerData(server, data))
+				.catch((err) =>
+					setServerData(server, undefined, err instanceof Error ? err.message : String(err))
+				);
+		}
+	}
+
+	function setServerData(server: Server, data?: MinecraftServer | SteamServer, error?: string) {
+		if (data)
+			setServers((servers) => servers?.map((s) => (s.id === server.id ? { ...s, data } : s)) ?? []);
+		else if (error)
+			setServers(
+				(servers) => servers?.map((s) => (s.id === server.id ? { ...s, error } : s)) ?? []
+			);
 	}
 
 	async function setServer(
