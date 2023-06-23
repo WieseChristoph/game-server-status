@@ -11,6 +11,12 @@
 
 This app does not collect personal information. It stores the server address, port and display name on the device. Your IP is shared with whichever server you are adding because your device connects to this server to get the status.
 
+# Screenshots
+
+|              Home screen              |              Add sever screen              |
+| :-----------------------------------: | :----------------------------------------: |
+| ![Home](.github/screenshots/home.png) | ![Add server](.github/screenshots/add.png) |
+
 # Developement run
 
 Installation of dependencies
