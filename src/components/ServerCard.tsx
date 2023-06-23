@@ -2,7 +2,7 @@ import useServer from "~/hooks/useServer";
 import { useRouter } from "expo-router";
 import { useRef } from "react";
 
-import { View, Animated, TouchableHighlight, Image, TouchableOpacity } from "react-native";
+import { View, Text, Animated, TouchableHighlight, Image, TouchableOpacity } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Svg, { Line, Path } from "react-native-svg";
 import MinecraftServer from "~/types/MinecraftServer";
@@ -53,7 +53,12 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
 								)
 							}
 						>
-							<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] overflow-hidden">
+							<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] overflow-hidden relative">
+								<Text
+									className={`${
+										server.data ? "bg-green-600" : "bg-red-600"
+									} absolute left-2 top-2 w-3 h-3 rounded-full`}
+								/>
 								{server.type === ServerType.Minecraft ? (
 									(server.data as MinecraftServer)?.favicon ? (
 										// server icon
