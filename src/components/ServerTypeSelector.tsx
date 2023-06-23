@@ -1,3 +1,4 @@
+import React from "react";
 import { TouchableHighlight, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 

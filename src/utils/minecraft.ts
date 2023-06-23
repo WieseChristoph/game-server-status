@@ -60,14 +60,12 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 		});
 
 		let bytesToRead = -1;
-		let dataLengthIntSize = -1;
 		let fullData = "";
 
 		client.on("data", (data) => {
 			if (bytesToRead === -1) {
-				const { value, length } = readVarInt(data as Buffer);
+				const { value } = readVarInt(data as Buffer);
 				bytesToRead = value;
-				dataLengthIntSize = length;
 			}
 
 			fullData += data.toString();

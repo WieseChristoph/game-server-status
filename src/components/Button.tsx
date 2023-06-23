@@ -1,3 +1,4 @@
+import React from "react";
 import { View, Text, TouchableHighlight } from "react-native";
 
 const Button: React.FC<{ text: string; textClassName?: string; onPress?: () => void }> = ({

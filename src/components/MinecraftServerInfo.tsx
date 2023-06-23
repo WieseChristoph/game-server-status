@@ -1,3 +1,4 @@
+import React from "react";
 import { View, Text } from "react-native";
 import MinecraftServer from "~/types/MinecraftServer";
 import MinecraftMotd from "./MinecraftMotd";

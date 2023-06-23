@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Animated, Easing } from "react-native";
 import Svg, { Path } from "react-native-svg";
 

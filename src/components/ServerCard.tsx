@@ -1,6 +1,6 @@
+import React, { useRef } from "react";
 import useServer from "~/hooks/useServer";
 import { useRouter } from "expo-router";
-import { useRef } from "react";
 
 import { View, Text, Animated, TouchableHighlight, Image, TouchableOpacity } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
@@ -29,28 +29,20 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
 					<TouchableOpacity activeOpacity={1} onLongPress={drag} disabled={isActive}>
 						<Swipeable
 							ref={swipeableRef}
-							renderLeftActions={(progress, dragAnimatedValue) =>
-								renderLeftActions(
-									() => {
-										router.push({
-											pathname: "/editServer",
-											params: { server: server.id },
-										});
-										swipeableRef.current?.close();
-									},
-									progress,
-									dragAnimatedValue
-								)
+							renderLeftActions={() =>
+								renderLeftActions(() => {
+									router.push({
+										pathname: "/editServer",
+										params: { server: server.id },
+									});
+									swipeableRef.current?.close();
+								})
 							}
-							renderRightActions={(progress, dragAnimatedValue) =>
-								renderRightActions(
-									() => {
-										removeServer(server);
-										swipeableRef.current?.close();
-									},
-									progress,
-									dragAnimatedValue
-								)
+							renderRightActions={() =>
+								renderRightActions(() => {
+									removeServer(server);
+									swipeableRef.current?.close();
+								})
 							}
 						>
 							<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] overflow-hidden relative">
@@ -110,11 +102,7 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
 	);
 };
 
-const renderLeftActions = (
-	onEditPress: () => void,
-	progress: Animated.AnimatedInterpolation<string | number>,
-	dragAnimatedValue: Animated.AnimatedInterpolation<string | number>
-) => {
+const renderLeftActions = (onEditPress: () => void) => {
 	return (
 		<TouchableHighlight onPress={onEditPress}>
 			<Animated.View className="bg-yellow-500 p-2 rounded-md ml-4 mb-4 flex flex-1 justify-center">
@@ -134,11 +122,7 @@ const renderLeftActions = (
 	);
 };
 
-const renderRightActions = (
-	onDeletePress: () => void,
-	progress: Animated.AnimatedInterpolation<string | number>,
-	dragAnimatedValue: Animated.AnimatedInterpolation<string | number>
-) => {
+const renderRightActions = (onDeletePress: () => void) => {
 	return (
 		<TouchableHighlight onPress={onDeletePress}>
 			<Animated.View className="bg-red-500 p-2 rounded-md mr-4 mb-4 flex flex-1 justify-center">

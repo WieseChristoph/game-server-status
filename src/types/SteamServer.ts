@@ -20,11 +20,11 @@ export type SteamServerInfo = {
 	vac: number;
 	version: string;
 	port?: number;
-	serverId?: BigInt;
+	serverId?: bigint;
 	spectatorPort?: number;
 	spectatorName?: string;
 	keywords?: string;
-	gameId?: BigInt;
+	gameId?: bigint;
 };
 
 export type SteamServerPlayer = {

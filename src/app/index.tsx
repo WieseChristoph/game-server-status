@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
 
 import { Text, View } from "react-native";
@@ -46,7 +46,7 @@ const Index = () => {
 					{servers !== null ? (
 						<DraggableFlatList
 							data={servers}
-							onDragEnd={({ data, from, to }) => setPosition(from, to)}
+							onDragEnd={({ from, to }) => setPosition(from, to)}
 							renderItem={ServerCard}
 							keyExtractor={(item) => item.id}
 							renderPlaceholder={() => (

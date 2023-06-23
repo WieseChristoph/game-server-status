@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ServerType } from "~/types/Server";
 import useServer from "~/hooks/useServer";

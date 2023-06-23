@@ -1,3 +1,4 @@
+import React from "react";
 import SteamServer from "~/types/SteamServer";
 
 import { View, Text } from "react-native";

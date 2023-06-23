@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useState } from "react";
+import React, { Dispatch, SetStateAction, createContext, useState } from "react";
 import { Server } from "~/types/Server";
 
 const ServerContext = createContext<{

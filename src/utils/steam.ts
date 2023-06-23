@@ -8,7 +8,10 @@ function randomPort() {
 
 export function querySteam(host: string, port = 27015, timeout = 5000) {
 	return new Promise<SteamServer>((resolve, reject) => {
-		const client = dgram.createSocket({ type: "udp4", debug: true });
+		const client = dgram.createSocket({ type: "udp4", debug: true }, (msg) => {
+			console.log("MSG: ", msg);
+			console.log(timeout);
+		});
 
 		client.bind(randomPort(), (err: Error | undefined) => {
 			if (err) {
