@@ -26,7 +26,7 @@ const Index = () => {
 					headerLeft: () => <GitHubButton size={30} />,
 					headerTitle: () => (
 						<Text className="text-3xl font-bold text-white">
-							<Text className="text-[#a732f5]">Game</Text>server Status
+							<Text className="text-[#a732f5]">Game</Text> Server Status
 						</Text>
 					),
 					headerTitleAlign: "center",
