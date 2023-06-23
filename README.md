@@ -11,6 +11,12 @@
 
 This app does not collect personal information. It stores the server address, port and display name on the device. Your IP is shared with whichever server you are adding because your device connects to this server to get the status.
 
+# Usage
+
+- Swipe right on a server to edit it
+- Swipe left on a server to delete it
+- Press and hold on a server to move it
+
 # Screenshots
 
 |              Home screen              |              Add sever screen              |
