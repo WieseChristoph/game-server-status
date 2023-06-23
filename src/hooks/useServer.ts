@@ -119,11 +119,8 @@ const useServer = () => {
 				AsyncStorage.setItem(
 					s.id,
 					JSON.stringify({
+						...s,
 						position: s.position,
-						type: s.type,
-						displayName: s.displayName,
-						address: s.address,
-						port: s.port,
 					})
 				);
 			}
