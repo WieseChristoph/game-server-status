@@ -12,7 +12,7 @@ import DraggableFlatList from "react-native-draggable-flatlist";
 
 const Index = () => {
 	const router = useRouter();
-	const { servers, refetch, setPosition, getConnectionString } = useServer();
+	const { servers, refetch, setPosition } = useServer();
 
 	useEffect(() => {
 		refetch();
@@ -47,7 +47,7 @@ const Index = () => {
 						data={servers}
 						onDragEnd={({ data, from, to }) => setPosition(from, to)}
 						renderItem={ServerCard}
-						keyExtractor={(item) => getConnectionString(item)}
+						keyExtractor={(item) => item.id}
 						renderPlaceholder={() => (
 							<View className="bg-[#2f333f] shadow-lg shadow-black rounded-md mx-4 mb-4 items-center h-[125px]" />
 						)}

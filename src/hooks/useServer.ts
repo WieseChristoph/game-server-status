@@ -1,3 +1,5 @@
+import "fast-text-encoding"; // Required for CUID2
+import { createId } from "@paralleldrive/cuid2";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from "react";
 import ServerContext from "~/context/ServerContext";
@@ -9,10 +11,6 @@ import { querySteam } from "~/utils/steam";
 
 const useServer = () => {
 	const { servers, setServers } = useContext(ServerContext);
-
-	function getConnectionString(server: Server) {
-		return `${server.address}:${server.port}`;
-	}
 
 	function queryServerData(server: Server) {
 		return new Promise<MinecraftServer | SteamServer>((resolve, reject) => {
@@ -52,24 +50,41 @@ const useServer = () => {
 		setServers(newServers);
 	}
 
-	async function setServer(newServer: Server, isEdit = false) {
-		newServer.address = newServer.address.toLocaleLowerCase();
+	async function setServer(
+		type: ServerType,
+		displayName: string,
+		address: string,
+		port: number,
+		id?: string,
+		position?: number
+	) {
+		address = address.toLocaleLowerCase();
 
-		if (!isEdit && (await AsyncStorage.getItem(getConnectionString(newServer))) !== null)
-			throw new Error("A Server with this address already exists");
-		if (newServer.address.length === 0) throw new Error("Address cannot be empty");
-		if (newServer.port < 0 || isNaN(newServer.port))
-			throw new Error("Port cannot be empty or negative");
+		if (address.length === 0) throw new Error("Address cannot be empty");
+		if (port < 0 || isNaN(port)) throw new Error("Port cannot be empty or negative");
 
-		if (!isEdit) newServer.position = servers?.length ?? 0;
+		if (!id) {
+			id = createId();
+			position = servers?.length ?? 0;
+		}
 
-		await AsyncStorage.setItem(getConnectionString(newServer), JSON.stringify(newServer));
+		await AsyncStorage.setItem(
+			id,
+			JSON.stringify({
+				id,
+				position,
+				type,
+				displayName,
+				address,
+				port,
+			})
+		);
 
 		fetchAllServers();
 	}
 
 	async function removeServer(server: Server) {
-		await AsyncStorage.removeItem(getConnectionString(server));
+		await AsyncStorage.removeItem(server.id);
 
 		fetchAllServers();
 	}
@@ -102,7 +117,7 @@ const useServer = () => {
 
 			if (changed) {
 				AsyncStorage.setItem(
-					getConnectionString(s),
+					s.id,
 					JSON.stringify({
 						position: s.position,
 						type: s.type,
@@ -125,7 +140,6 @@ const useServer = () => {
 		removeServer,
 		refetch: fetchAllServers,
 		setPosition,
-		getConnectionString,
 	};
 };
 

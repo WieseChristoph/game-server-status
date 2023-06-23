@@ -19,7 +19,7 @@ import {
 
 const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, isActive }) => {
 	const router = useRouter();
-	const { removeServer, getConnectionString } = useServer();
+	const { removeServer } = useServer();
 	const swipeableRef = useRef<Swipeable>(null);
 
 	return (
@@ -34,7 +34,7 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
 									() => {
 										router.push({
 											pathname: "/editServer",
-											params: { server: getConnectionString(server) },
+											params: { server: server.id },
 										});
 										swipeableRef.current?.close();
 									},

@@ -11,9 +11,9 @@ import ServerTypeSelector from "~/components/ServerTypeSelector";
 const EditServer: React.FC = () => {
 	const router = useRouter();
 	const { isNew, server } = useLocalSearchParams();
-	const { servers, setServer, getConnectionString } = useServer();
+	const { servers, setServer } = useServer();
 
-	const serverToEdit = servers?.find((s) => getConnectionString(s) === server);
+	const serverToEdit = servers?.find((s) => s.id === server);
 
 	const [serverType, setServerType] = useState<ServerType>(
 		serverToEdit ? serverToEdit.type : ServerType.Minecraft
@@ -81,8 +81,12 @@ const EditServer: React.FC = () => {
 						text="Save"
 						onPress={() =>
 							setServer(
-								{ displayName, address, port, type: serverType },
-								isNew === undefined || isNew === "false"
+								serverType,
+								displayName,
+								address,
+								port,
+								serverToEdit?.id,
+								serverToEdit?.position
 							)
 								.then(() => router.push("/"))
 								.catch((err: Error) =>
