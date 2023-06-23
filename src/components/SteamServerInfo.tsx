@@ -30,12 +30,13 @@ const SteamServerInfo: React.FC<{
 						<Text className="text-neutral-400 text-xs flex-1">{data.ping + "ms"}</Text>
 						<Text className="text-white">{data.map}</Text>
 					</View>
-
+					<View className="border-b border-white my-1" />
 					<Text className="text-white text-center p-2">{data.name}</Text>
 				</>
 			) : (
 				<>
 					<Text className="text-neutral-400 text-xs">{`${address}:${port}`}</Text>
+					<View className="border-b border-white my-1" />
 					<View className="flex justify-center flex-1">
 						<Text className="text-red-500 text-center font-bold">{error}</Text>
 					</View>
