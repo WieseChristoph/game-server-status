@@ -42,19 +42,21 @@ const Index = () => {
 					/>
 				</View>
 
-				{servers !== null ? (
-					<DraggableFlatList
-						data={servers}
-						onDragEnd={({ data, from, to }) => setPosition(from, to)}
-						renderItem={ServerCard}
-						keyExtractor={(item) => item.id}
-						renderPlaceholder={() => (
-							<View className="bg-[#2f333f] shadow-lg shadow-black rounded-md mx-4 mb-4 items-center h-[125px]" />
-						)}
-					/>
-				) : (
-					<LoadingIcon size={64} textClassName="self-center mt-4" />
-				)}
+				<View className="flex-1">
+					{servers !== null ? (
+						<DraggableFlatList
+							data={servers}
+							onDragEnd={({ data, from, to }) => setPosition(from, to)}
+							renderItem={ServerCard}
+							keyExtractor={(item) => item.id}
+							renderPlaceholder={() => (
+								<View className="bg-[#a732f5] shadow-lg shadow-black rounded-md mx-4 mb-4 items-center min-h-[125px] flex-1" />
+							)}
+						/>
+					) : (
+						<LoadingIcon size={64} textClassName="self-center mt-4" />
+					)}
+				</View>
 			</View>
 		</View>
 	);
