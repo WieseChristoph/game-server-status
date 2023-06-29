@@ -16,6 +16,7 @@ This app does not collect personal information. It stores the server address, po
 - Swipe right on a server to edit it
 - Swipe left on a server to delete it
 - Press and hold on a server to move it
+- Pull down to refresh
 
 # Screenshots
 

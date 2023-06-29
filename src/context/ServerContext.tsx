@@ -1,13 +1,12 @@
 import React, { Dispatch, SetStateAction, createContext, useState } from "react";
 import { Server } from "~/types/Server";
 
-const ServerContext = createContext<{
+interface ServerContextValue {
 	servers: Server[] | null;
 	setServers: Dispatch<SetStateAction<Server[] | null>>;
-}>({
-	servers: [],
-	setServers: () => undefined,
-});
+}
+
+const ServerContext = createContext<ServerContextValue | undefined>(undefined);
 
 export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [servers, setServers] = useState<Server[] | null>(null);

@@ -81,9 +81,13 @@ export function queryMinecraft(host: string, port = 25565, timeout = 5000) {
 				return;
 			}
 
-			const serverInfo = JSON.parse(fullData.slice(fullData.indexOf("{"))) as MinecraftServer;
-			serverInfo.ping = ping;
-			resolve(serverInfo);
+			try {
+				const serverInfo = JSON.parse(fullData.slice(fullData.indexOf("{"))) as MinecraftServer;
+				serverInfo.ping = ping;
+				resolve(serverInfo);
+			} catch (err) {
+				reject(err);
+			}
 		});
 	});
 }

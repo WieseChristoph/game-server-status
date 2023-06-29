@@ -67,9 +67,11 @@ export function querySteam(host: string, port = 27015, timeout = 5000) {
 		let ping = -1;
 		let pingStart = -1;
 
-		setTimeout(() => reject(new Error("Timeout")), timeout);
-
 		const socket = dgram.createSocket({ type: "udp4" });
+
+		const timeoutFn = setTimeout(() => {
+			socket.close(() => reject(new Error("Timeout")));
+		}, timeout);
 
 		socket.bind(randomPort(), (err: Error | undefined) => {
 			if (err) {
@@ -127,6 +129,15 @@ export function querySteam(host: string, port = 27015, timeout = 5000) {
 			});
 
 			pingStart = Date.now();
+		});
+
+		socket.on("error", (err) => {
+			socket.close();
+			reject(err);
+		});
+
+		socket.on("close", () => {
+			clearTimeout(timeoutFn);
 		});
 	});
 }
