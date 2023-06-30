@@ -23,7 +23,7 @@ const MinecraftServerInfo: React.FC<{
 			</View>
 			{data ? (
 				<>
-					<View className="flex flex-row">
+					<View className="flex flex-row flex-1">
 						<View className="flex-1">
 							<Text className="text-neutral-400 text-xs flex-1">{`${address}:${port}`}</Text>
 							<Text className="text-neutral-400 text-xs flex-1">{data.ping + "ms"}</Text>
