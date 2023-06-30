@@ -12,7 +12,7 @@ const SteamServerInfo: React.FC<{
 }> = ({ displayName, address, port, data, error }) => {
 	return (
 		<>
-			<View className="flex flex-row">
+			<View className="flex flex-row flex-1">
 				<Text className="text-white text-xl font-bold flex-1 break-words">
 					{displayName ?? "Unnamed"}
 				</Text>

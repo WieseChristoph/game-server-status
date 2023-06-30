@@ -45,7 +45,7 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
 								})
 							}
 						>
-							<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] overflow-hidden relative">
+							<View className="bg-[#2f333f] p-2 shadow-lg shadow-black rounded-md mx-4 mb-4 flex flex-row items-center min-h-[125px] relative">
 								<View
 									className={`${
 										server.data ? "bg-green-600" : "bg-red-600"
