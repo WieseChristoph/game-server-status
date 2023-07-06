@@ -1,6 +1,6 @@
 {
 	"expo": {
-		"name": "game-server-status",
+		"name": "Game Server Status",
 		"slug": "game-server-status",
 		"scheme": "game-server-status",
 		"version": "1.0.0",
@@ -23,6 +23,11 @@
 				"backgroundColor": "#17191f"
 			},
 			"package": "de.christoph.wiese.gameserverstatus"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "5914a168-30ce-49c5-84e0-85362cfd7c86"
+			}
 		}
 	}
 }
