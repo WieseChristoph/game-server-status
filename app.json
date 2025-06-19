@@ -1,33 +1,36 @@
 {
-	"expo": {
-		"name": "Game Server Status",
-		"slug": "game-server-status",
-		"scheme": "game-server-status",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "dark",
-		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#17191f"
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "de.christoph.wiese.gameserverstatus"
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#17191f"
-			},
-			"package": "de.christoph.wiese.gameserverstatus"
-		},
-		"extra": {
-			"eas": {
-				"projectId": "5914a168-30ce-49c5-84e0-85362cfd7c86"
-			}
-		}
-	}
+  "expo": {
+    "name": "Game Server Status",
+    "slug": "game-server-status",
+    "scheme": "game-server-status",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#17191f"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "de.christoph.wiese.gameserverstatus"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#17191f"
+      },
+      "package": "de.christoph.wiese.gameserverstatus"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5914a168-30ce-49c5-84e0-85362cfd7c86"
+      }
+    }
+  }
 }
