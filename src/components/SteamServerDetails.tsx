@@ -15,15 +15,15 @@ const SteamServerDetails: React.FC<{
       </View>
       <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
         <Text className='text-white text-sm font-bold'>Game</Text>
-        <Text className='text-gray-400 break-words'>{data.a2sInfo.game}</Text>
+        <Text className='text-gray-400'>{data.a2sInfo.game}</Text>
       </View>
       <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
         <Text className='text-white text-sm font-bold'>Map</Text>
-        <Text className='text-gray-400 break-words'>{data.a2sInfo.map}</Text>
+        <Text className='text-gray-400'>{data.a2sInfo.map}</Text>
       </View>
       <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
         <Text className='text-white text-sm font-bold'>Valve Anti-Cheat</Text>
-        <Text className='text-gray-400 break-words'>{data.a2sInfo.vac ? 'Secure' : 'Not secure'}</Text>
+        <Text className='text-gray-400'>{data.a2sInfo.vac ? 'Secure' : 'Not secure'}</Text>
       </View>
       <View className='flex gap-2'>
         <Text className='text-white text-sm font-bold'>Players</Text>

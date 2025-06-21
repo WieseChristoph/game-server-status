@@ -48,15 +48,21 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
             <Pressable onPress={toggleExpanded} onLongPress={drag} disabled={isActive}>
               <View className={`flex gap-3 bg-[#2f333f] shadow-lg rounded-md p-3 border border-gray-700`}>
                 <ServerCardHeader server={server} expanded={expanded} />
-                {expanded && server.data && (
-                  <View>
-                    {server.type === 'minecraft' ? (
-                      <MinecraftServerDetails data={server.data} />
-                    ) : (
-                      <SteamServerDetails data={server.data} />
-                    )}
-                  </View>
-                )}
+                {expanded &&
+                  (server.data ? (
+                    <View>
+                      {server.type === 'minecraft' ? (
+                        <MinecraftServerDetails data={server.data} />
+                      ) : (
+                        <SteamServerDetails data={server.data} />
+                      )}
+                    </View>
+                  ) : (
+                    <View className='flex flex-row gap-5 justify-between'>
+                      <Text className='text-white text-sm font-bold'>Error</Text>
+                      <Text className='text-red-400 break-all'>{server.error}</Text>
+                    </View>
+                  ))}
               </View>
             </Pressable>
           </Swipeable>
@@ -79,6 +85,9 @@ const ServerCardIcon: React.FC<{ type: ServerType; favicon?: string }> = ({ type
 };
 
 const ServerCardHeader: React.FC<{ server: Server; expanded: boolean }> = ({ server, expanded }) => {
+  const playerCount = server.type === 'minecraft' ? server.data?.players.online : server.data?.a2sInfo.players;
+  const maxPlayers = server.type === 'minecraft' ? server.data?.players.max : server.data?.a2sInfo.maxPlayers;
+
   return (
     <>
       <View className='flex flex-row w-full gap-3 items-center'>
@@ -101,7 +110,7 @@ const ServerCardHeader: React.FC<{ server: Server; expanded: boolean }> = ({ ser
               {server.address}:{server.port}
             </Text>
 
-            <Text className='text-white text-right'>{`${(server.type === 'minecraft' ? server.data?.players.online : server.data?.a2sInfo.players) ?? 0}/${(server.type === 'minecraft' ? server.data?.players.max : server.data?.a2sInfo.maxPlayers) ?? 0}`}</Text>
+            {maxPlayers && <Text className='text-white text-right'>{`${playerCount ?? 0}/${maxPlayers}`}</Text>}
           </View>
         </View>
       </View>

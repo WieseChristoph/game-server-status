@@ -13,17 +13,17 @@ const MinecraftServerDetails: React.FC<{
     <View className='flex gap-1'>
       <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
         <Text className='text-white text-sm font-bold'>Motd</Text>
-        <Text className='text-gray-400 break-words text-center'>
+        <Text className='text-center'>
           <MinecraftMotd motd={data.description} />
         </Text>
       </View>
       <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
         <Text className='text-white text-sm font-bold'>Version</Text>
-        <Text className='text-gray-400 break-words'>{data.version.name}</Text>
+        <Text className='text-gray-400'>{data.version.name}</Text>
       </View>
       <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
         <Text className='text-white text-sm font-bold'>Enforces Secure Chat</Text>
-        <Text className='text-gray-400 break-words'>{data.enforcesSecureChat ? 'Yes' : 'No'}</Text>
+        <Text className='text-gray-400'>{data.enforcesSecureChat ? 'Yes' : 'No'}</Text>
       </View>
       <View className='flex gap-2'>
         <Text className='text-white text-sm font-bold'>Players</Text>
@@ -46,6 +46,7 @@ const MinecraftPlayerListItem: ListRenderItem<{ id: string; name: string }> = ({
       <Text className='text-sm font-medium text-gray-200 flex-1 mr-2' numberOfLines={1}>
         {item.name}
       </Text>
+      <Text className='items-end text-xs text-gray-400'>{item.id}</Text>
     </View>
   );
 };
