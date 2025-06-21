@@ -1,7 +1,7 @@
-import UDPSockets from "react-native-udp";
-import { Buffer } from "buffer";
-import SteamServer, { A2S_INFO, A2S_PLAYER } from "~/types/SteamServer";
-import UdpSocket from "react-native-udp/lib/types/UdpSocket";
+import UDPSockets from 'react-native-udp';
+import { Buffer } from 'buffer';
+import SteamServer, { A2S_INFO, A2S_PLAYER } from '~/types/SteamServer';
+import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 
 const S2C_CHALLENGE_HEADER = 65; // Response with challenge number
 const S2C_INFO_HEADER = 73; // A2S_INFO response
@@ -12,7 +12,7 @@ function randomPort() {
 }
 
 function readString(buffer: Buffer) {
-  return buffer.slice(0, buffer.indexOf(0x00)).toString("utf8");
+  return buffer.slice(0, buffer.indexOf(0x00)).toString('utf8');
 }
 
 function readA2sInfo(buffer: Buffer): A2S_INFO {
@@ -49,10 +49,10 @@ function readA2sInfo(buffer: Buffer): A2S_INFO {
   a2sInfo.bots = buffer.readUInt8(0);
   buffer = buffer.slice(1);
   // Read server type
-  a2sInfo.serverType = buffer.slice(0, 1).toString("utf8");
+  a2sInfo.serverType = buffer.slice(0, 1).toString('utf8');
   buffer = buffer.slice(1);
   // Read environment
-  a2sInfo.environment = buffer.slice(0, 1).toString("utf8");
+  a2sInfo.environment = buffer.slice(0, 1).toString('utf8');
   buffer = buffer.slice(1);
   // Read visibility
   a2sInfo.private = Boolean(buffer.readUInt8(0));
@@ -105,7 +105,7 @@ function sendA2sInfoRequest(socket: UdpSocket, host: string, port: number, chall
   const a2sInfoRequestBuffer = Buffer.concat([
     Buffer.from([0xff, 0xff, 0xff, 0xff]),
     Buffer.from([0x54]),
-    Buffer.from("Source Engine Query", "ascii"),
+    Buffer.from('Source Engine Query', 'ascii'),
     Buffer.from([0x00]),
     challenge ? challenge : Buffer.from([0xff, 0xff, 0xff, 0xff]),
   ]);
@@ -138,7 +138,7 @@ export function querySteamServer(host: string, port = 27015, timeoutMs = 10000) 
     let ping = -1;
     let pingStart = -1;
 
-    const socket = UDPSockets.createSocket({ type: "udp4" });
+    const socket = UDPSockets.createSocket({ type: 'udp4' });
 
     const socketTimeout = setTimeout(() => {
       socket.close(() => {
@@ -146,7 +146,7 @@ export function querySteamServer(host: string, port = 27015, timeoutMs = 10000) 
           resolve(server);
         }
 
-        reject(new Error("Socket timeout"));
+        reject(new Error('Socket timeout'));
       });
     }, timeoutMs);
 
@@ -157,7 +157,7 @@ export function querySteamServer(host: string, port = 27015, timeoutMs = 10000) 
       }
     });
 
-    socket.once("listening", () => {
+    socket.once('listening', () => {
       try {
         pingStart = Date.now();
         sendA2sInfoRequest(socket, host, port);
@@ -167,7 +167,7 @@ export function querySteamServer(host: string, port = 27015, timeoutMs = 10000) 
       }
     });
 
-    socket.on("message", function (data: Buffer) {
+    socket.on('message', function (data: Buffer) {
       ping = Date.now() - pingStart;
 
       const header = data.at(4);
@@ -212,12 +212,12 @@ export function querySteamServer(host: string, port = 27015, timeoutMs = 10000) 
       resolve(server);
     });
 
-    socket.on("error", (err) => {
+    socket.on('error', (err) => {
       socket.close();
       reject(err);
     });
 
-    socket.on("close", () => {
+    socket.on('close', () => {
       clearTimeout(socketTimeout);
     });
   });

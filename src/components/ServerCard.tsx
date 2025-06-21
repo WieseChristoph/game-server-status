@@ -60,7 +60,7 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
                   ) : (
                     <View className='flex flex-row gap-5 justify-between'>
                       <Text className='text-white text-sm font-bold'>Error</Text>
-                      <Text className='text-red-400 break-all'>{server.error}</Text>
+                      <Text className='text-red-400 flex-shrink break-all'>{server.error}</Text>
                     </View>
                   ))}
               </View>
