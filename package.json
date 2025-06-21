@@ -8,7 +8,7 @@
     "web": "expo start --web",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "start": "expo start --clear --tunnel",
+    "start": "expo start --clear",
     "start:go": "expo start -g --clear --tunnel"
   },
   "dependencies": {

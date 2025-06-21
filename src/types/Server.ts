@@ -1,18 +1,24 @@
-import MinecraftServer from "./MinecraftServer";
-import SteamServer from "./SteamServer";
+import MinecraftServer from './MinecraftServer';
+import SteamServer from './SteamServer';
 
-export enum ServerType {
-  Minecraft,
-  Steam,
-}
+type ServerDataMap = {
+  minecraft: MinecraftServer;
+  steam: SteamServer;
+};
 
-export type Server = {
+export type ServerType = keyof ServerDataMap;
+
+export type ServerBase<T extends ServerType> = {
   id: string;
   position: number;
-  type: ServerType;
+  type: T;
   displayName: string;
   address: string;
   port: number;
-  data?: MinecraftServer | SteamServer;
+  data?: ServerDataMap[T];
   error?: string;
 };
+
+export type Server = {
+  [K in ServerType]: ServerBase<K>;
+}[ServerType];

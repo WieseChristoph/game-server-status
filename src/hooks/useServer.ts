@@ -1,17 +1,17 @@
-import "fast-text-encoding"; // Required for CUID2
-import { createId } from "@paralleldrive/cuid2";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-import { Server, ServerType } from "~/types/Server";
-import { queryMinecraftServer } from "~/utils/minecraft";
-import { querySteamServer } from "~/utils/steam";
-import useServerContext from "./useServerContext";
+import 'fast-text-encoding'; // Required for CUID2
+import { createId } from '@paralleldrive/cuid2';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { Server, ServerType } from '~/types/Server';
+import { queryMinecraftServer } from '~/utils/minecraft';
+import { querySteamServer } from '~/utils/steam';
+import useServerContext from './useServerContext';
 
 const useServer = () => {
   const { servers, setServers } = useServerContext();
-  const [fetchAllServersRan, setFetchAllServersRan] = useState(false);
+  const [fetchAllServersRan, setFetchAllServersRan] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Query all servers if fetchAllServers ran
     if (fetchAllServersRan && servers) {
       queryAllServers();
@@ -48,11 +48,23 @@ const useServer = () => {
 
   async function queryServerStatus(server: Server) {
     try {
-      const data = await (server.type === ServerType.Minecraft
+      const data = await (server.type === 'minecraft'
         ? queryMinecraftServer(server.address, server.port)
         : querySteamServer(server.address, server.port));
 
-      setServers((servers) => servers?.map((s) => (s.id === server.id ? { ...s, data } : s)) ?? []);
+      setServers(
+        (servers) =>
+          servers?.map((s) => {
+            if (s.id !== server.id) return s;
+            if (s.type === 'minecraft' && server.type === 'minecraft') {
+              return { ...s, data: data as typeof s.data };
+            }
+            if (s.type === 'steam' && server.type === 'steam') {
+              return { ...s, data: data as typeof s.data };
+            }
+            return s;
+          }) ?? [],
+      );
     } catch (err) {
       const error = err as Error;
       setServers(
@@ -64,9 +76,9 @@ const useServer = () => {
     }
   }
 
-  async function setServer(server: Omit<Server, "id" | "position"> & Partial<Pick<Server, "id" | "position">>) {
-    if (server.address.length === 0) throw new Error("Address cannot be empty");
-    if (server.port < 0 || isNaN(server.port)) throw new Error("Port cannot be empty or negative");
+  async function setServer(server: Omit<Server, 'id' | 'position'> & Partial<Pick<Server, 'id' | 'position'>>) {
+    if (server.address.length === 0) throw new Error('Address cannot be empty');
+    if (server.port < 0 || isNaN(server.port)) throw new Error('Port cannot be empty or negative');
 
     server.address = server.address.toLocaleLowerCase();
 
