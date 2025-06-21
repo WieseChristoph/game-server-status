@@ -21,6 +21,10 @@ const MinecraftServerDetails: React.FC<{
         <Text className='text-white text-sm font-bold'>Version</Text>
         <Text className='text-gray-400 break-words'>{data.version.name}</Text>
       </View>
+      <View className='flex flex-row gap-5 justify-between pb-1 border-b border-gray-700'>
+        <Text className='text-white text-sm font-bold'>Enforces Secure Chat</Text>
+        <Text className='text-gray-400 break-words'>{data.enforcesSecureChat ? 'Yes' : 'No'}</Text>
+      </View>
       <View className='flex gap-2'>
         <Text className='text-white text-sm font-bold'>Players</Text>
         <FlatList
