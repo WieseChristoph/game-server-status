@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import MinecraftServer from '~/types/MinecraftServer';
 import { readVarInt } from './helper';
 
-export function queryMinecraftServer(host: string, port = 25565, timeoutMs = 10000) {
+export function queryMinecraftServer(host: string, port = 25565, timeoutMs = 5000) {
   return new Promise<MinecraftServer>((resolve, reject) => {
     let ping = -1;
     const pingStart = Date.now();

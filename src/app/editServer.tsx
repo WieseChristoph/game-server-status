@@ -1,19 +1,19 @@
 import React from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { ServerType } from '~/types/Server';
-import useServer from '~/hooks/useServer';
 import Toast from 'react-native-root-toast';
 
 import { View, Text, TextInput } from 'react-native';
 import ServerTypeSelector from '~/components/ServerTypeSelector';
 import { Pressable } from 'react-native-gesture-handler';
+import useServer from '~/hooks/useServer';
 
 const EditServer: React.FC = () => {
   const router = useRouter();
-  const { isNew, server } = useLocalSearchParams();
-  const { servers, setServer } = useServer();
+  const { serverId } = useLocalSearchParams<{ serverId?: string }>();
+  const { servers, addServer, updateServer, queryServer } = useServer();
 
-  const serverToEdit = servers?.find((s) => s.id === server);
+  const serverToEdit = serverId ? servers[Number(serverId)] : undefined;
 
   const [serverType, setServerType] = React.useState<ServerType>(serverToEdit ? serverToEdit.type : 'minecraft');
   const [displayName, setDisplayName] = React.useState<string>(serverToEdit ? serverToEdit.displayName : '');
@@ -27,7 +27,7 @@ const EditServer: React.FC = () => {
         options={{
           headerTitle: () => (
             <Text className='text-4xl font-bold text-white'>
-              <Text className='text-[#a732f5]'>{isNew !== undefined && isNew === 'true' ? 'Add' : 'Edit'}</Text> Server
+              <Text className='text-[#a732f5]'>{!serverId ? 'Add' : 'Edit'}</Text> Server
             </Text>
           ),
           headerTintColor: 'white',
@@ -71,22 +71,40 @@ const EditServer: React.FC = () => {
 
         <View className='mt-4'>
           <Pressable
-            onPress={() => {
-              setServer({
-                id: serverToEdit?.id,
-                position: serverToEdit?.position,
-                type: serverType,
-                displayName,
-                address,
-                port,
-              })
-                .then(() => router.push('/'))
-                .catch((err: Error) =>
-                  Toast.show(err.message, {
-                    duration: 5000,
-                    backgroundColor: 'red',
-                  }),
-                );
+            onPress={async () => {
+              try {
+                if (!serverToEdit) {
+                  const server = {
+                    type: serverType,
+                    displayName,
+                    address,
+                    port,
+                  };
+                  const addedServer = await addServer(server);
+
+                  queryServer(addedServer);
+                } else {
+                  const server = {
+                    id: serverToEdit.id,
+                    position: serverToEdit.position,
+                    type: serverType,
+                    displayName,
+                    address,
+                    port,
+                  };
+                  await updateServer(server);
+
+                  queryServer(server);
+                }
+
+                router.push('/');
+              } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                Toast.show(errorMessage, {
+                  duration: 5000,
+                  backgroundColor: 'red',
+                });
+              }
             }}
           >
             <View className={`p-2 bg-[#a732f5] rounded-md shadow-lg`}>

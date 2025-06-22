@@ -8,18 +8,18 @@
     "web": "expo start --web",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "start": "expo start --clear",
+    "start": "expo start --clear --tunnel",
     "start:go": "expo start -g --clear --tunnel"
   },
   "dependencies": {
-    "@paralleldrive/cuid2": "^2.2.2",
-    "@react-native-async-storage/async-storage": "2.1.2",
     "buffer": "^6.0.3",
     "expo": "^53.0.12",
     "expo-constants": "^17.1.6",
+    "expo-dev-client": "~5.2.1",
     "expo-linking": "^7.1.5",
     "expo-router": "^5.1.0",
     "expo-splash-screen": "^0.30.9",
+    "expo-sqlite": "~15.2.12",
     "expo-status-bar": "^2.2.3",
     "fast-text-encoding": "^1.0.6",
     "nativewind": "^4.1.23",
@@ -33,8 +33,7 @@
     "react-native-screens": "^4.11.0",
     "react-native-svg": "15.11.2",
     "react-native-tcp-socket": "^6.3.0",
-    "react-native-udp": "^4.1.7",
-    "expo-dev-client": "~5.2.1"
+    "react-native-udp": "^4.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.27.4",

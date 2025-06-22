@@ -1,24 +1,24 @@
-import MinecraftServer from './MinecraftServer';
-import SteamServer from './SteamServer';
+import MinecraftServerData from './MinecraftServer';
+import SteamServerData from './SteamServer';
 
-type ServerDataMap = {
-  minecraft: MinecraftServer;
-  steam: SteamServer;
-};
+export type ServerType = 'minecraft' | 'steam';
 
-export type ServerType = keyof ServerDataMap;
-
-export type ServerBase<T extends ServerType> = {
-  id: string;
+export type ServerBase = {
+  id: number;
   position: number;
-  type: T;
+  type: ServerType;
   displayName: string;
   address: string;
   port: number;
-  data?: ServerDataMap[T];
+};
+
+type ServerVariant<T extends ServerType, D> = ServerBase & {
+  type: T;
+  data?: D;
   error?: string;
 };
 
-export type Server = {
-  [K in ServerType]: ServerBase<K>;
-}[ServerType];
+export type MinecraftServer = ServerVariant<'minecraft', MinecraftServerData>;
+export type SteamServer = ServerVariant<'steam', SteamServerData>;
+
+export type Server = MinecraftServer | SteamServer;

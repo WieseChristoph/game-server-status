@@ -3,22 +3,18 @@ import { Stack, useRouter } from 'expo-router';
 
 import { Text, View } from 'react-native';
 import ServerCard from '~/components/ServerCard';
-import useServer from '~/hooks/useServer';
 import GitHubButton from '~/components/GitHubButton';
 import LoadingIcon from '~/components/LoadingIcon';
 import { NestableDraggableFlatList, NestableScrollContainer } from 'react-native-draggable-flatlist';
 import AddButton from '~/components/AddButton';
 import { RefreshControl } from 'react-native-gesture-handler';
+import useServer from '~/hooks/useServer';
 
 const Index = () => {
   const router = useRouter();
   const [dragging, setDragging] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
-  const { servers, fetchAllServers, setPosition, refetchStatus } = useServer();
-
-  React.useEffect(() => {
-    fetchAllServers();
-  }, []);
+  const { servers, changePosition, queryAllServers } = useServer();
 
   return (
     <View className='bg-[#1d2029]'>
@@ -41,7 +37,7 @@ const Index = () => {
             onRefresh={async () => {
               setRefreshing(true);
               try {
-                await refetchStatus();
+                await queryAllServers();
               } finally {
                 setRefreshing(false);
               }
@@ -50,19 +46,20 @@ const Index = () => {
             enabled={!dragging}
           />
         }
+        className='h-full'
       >
         {servers !== null ? (
           <NestableDraggableFlatList
-            data={servers}
+            data={Object.values(servers)}
             onDragBegin={() => setDragging(true)}
-            onDragEnd={({ from, to }) => {
+            onDragEnd={({ data, from, to }) => {
               setDragging(false);
-              setPosition(from, to);
+              changePosition(data[from].id, to);
             }}
             renderItem={({ item, drag, isActive, getIndex }) => (
               <ServerCard item={item} drag={drag} isActive={isActive} getIndex={getIndex} />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => `server_${item.id}`}
             contentContainerStyle={{ padding: 10, gap: 10 }}
             showsVerticalScrollIndicator={true}
             renderPlaceholder={() => (

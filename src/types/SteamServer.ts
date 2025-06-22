@@ -26,10 +26,10 @@ export type A2S_PLAYER = {
   }[];
 };
 
-export type SteamServer = {
+export type SteamServerData = {
   ping: number;
   a2sInfo: A2S_INFO;
   a2sPlayer?: A2S_PLAYER;
 };
 
-export default SteamServer;
+export default SteamServerData;

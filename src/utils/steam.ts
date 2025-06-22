@@ -132,7 +132,7 @@ function sendA2sPlayerRequest(socket: UdpSocket, host: string, port: number, cha
   });
 }
 
-export function querySteamServer(host: string, port = 27015, timeoutMs = 10000) {
+export function querySteamServer(host: string, port = 27015, timeoutMs = 5000) {
   return new Promise<SteamServer>((resolve, reject) => {
     const server = {} as SteamServer;
     let ping = -1;

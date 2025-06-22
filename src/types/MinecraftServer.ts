@@ -1,5 +1,5 @@
 // https://wiki.vg/Server_List_Ping#Status_Response
-export type MinecraftServer = {
+export type MinecraftServerData = {
   version: { name: string; protocol: number };
   players: { max: number; online: number; sample?: { name: string; id: string }[] };
   description: string | MinecraftServerDescription;
@@ -22,4 +22,4 @@ export type MinecraftServerDescription = {
   }[];
 };
 
-export default MinecraftServer;
+export default MinecraftServerData;

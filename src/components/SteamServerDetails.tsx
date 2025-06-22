@@ -1,11 +1,11 @@
 import React from 'react';
-import SteamServer from '~/types/SteamServer';
+import SteamServerData from '~/types/SteamServer';
 
 import { View, Text, ListRenderItem } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 const SteamServerDetails: React.FC<{
-  data: SteamServer;
+  data: SteamServerData;
 }> = ({ data }) => {
   return (
     <View className='flex gap-1'>

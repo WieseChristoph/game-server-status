@@ -1,5 +1,4 @@
 import React from 'react';
-import useServer from '~/hooks/useServer';
 import { useRouter } from 'expo-router';
 
 import { View, Image, Text, LayoutAnimation } from 'react-native';
@@ -11,10 +10,13 @@ import { OpacityDecorator, RenderItemParams, ScaleDecorator, ShadowDecorator } f
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { Pressable } from 'react-native-gesture-handler';
 import { GRASS_BLOCK } from '~/image';
+import useServer from '~/hooks/useServer';
+import MinecraftServer from '~/types/MinecraftServer';
+import SteamServer from '~/types/SteamServer';
 
 const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, isActive }) => {
   const router = useRouter();
-  const { removeServer } = useServer();
+  const { deleteServer } = useServer();
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -31,7 +33,7 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
             renderLeftActions={(_prog, _drag, methods) => (
               <EditServerButton
                 onEditPress={() => {
-                  router.push({ pathname: '/editServer', params: { server: server.id } });
+                  router.push({ pathname: '/editServer', params: { serverId: server.id } });
                   methods.close();
                 }}
               />
@@ -39,7 +41,7 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
             renderRightActions={(_prog, _drag, methods) => (
               <DeleteServerButton
                 onDeletePress={() => {
-                  removeServer(server);
+                  deleteServer(server.id);
                   methods.close();
                 }}
               />
@@ -47,14 +49,14 @@ const ServerCard: React.FC<RenderItemParams<Server>> = ({ item: server, drag, is
           >
             <Pressable onPress={toggleExpanded} onLongPress={drag} disabled={isActive}>
               <View className={`flex gap-3 bg-[#2f333f] shadow-lg rounded-md p-3 border border-gray-700`}>
-                <ServerCardHeader server={server} expanded={expanded} />
+                <ServerCardHeader server={server} />
                 {expanded &&
                   (server.data ? (
                     <View>
                       {server.type === 'minecraft' ? (
-                        <MinecraftServerDetails data={server.data} />
+                        <MinecraftServerDetails data={server.data as MinecraftServer} />
                       ) : (
-                        <SteamServerDetails data={server.data} />
+                        <SteamServerDetails data={server.data as SteamServer} />
                       )}
                     </View>
                   ) : (
@@ -84,7 +86,7 @@ const ServerCardIcon: React.FC<{ type: ServerType; favicon?: string }> = ({ type
   );
 };
 
-const ServerCardHeader: React.FC<{ server: Server; expanded: boolean }> = ({ server, expanded }) => {
+const ServerCardHeader: React.FC<{ server: Server }> = ({ server }) => {
   const playerCount = server.type === 'minecraft' ? server.data?.players.online : server.data?.a2sInfo.players;
   const maxPlayers = server.type === 'minecraft' ? server.data?.players.max : server.data?.a2sInfo.maxPlayers;
 

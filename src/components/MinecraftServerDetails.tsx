@@ -1,13 +1,12 @@
 import React from 'react';
-import SteamServer from '~/types/SteamServer';
 
 import { View, Text, ListRenderItem } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import MinecraftServer from '~/types/MinecraftServer';
+import MinecraftServerData from '~/types/MinecraftServer';
 import MinecraftMotd from './MinecraftMotd';
 
 const MinecraftServerDetails: React.FC<{
-  data: MinecraftServer;
+  data: MinecraftServerData;
 }> = ({ data }) => {
   return (
     <View className='flex gap-1'>
