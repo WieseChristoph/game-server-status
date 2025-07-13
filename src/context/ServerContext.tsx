@@ -92,10 +92,9 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     let addedServer: ServerBase = {} as ServerBase;
 
     await db.withTransactionAsync(async () => {
-      const { maxPos } = (await db.getFirstAsync<{ maxPos: number }>(
-        'SELECT COALESCE(MAX(position), 0) AS maxPos FROM server',
-      )) ?? { maxPos: 0 };
-      const position = maxPos + 1;
+      const { nextPos } = (await db.getFirstAsync<{ nextPos: number }>(
+        'SELECT COALESCE(MAX(position) + 1, 0) AS nextPos FROM server',
+      )) ?? { nextPos: 0 };
 
       const { lastInsertRowId } = await db.runAsync(
         `INSERT INTO server (type, displayName, address, port, position) VALUES (?,?,?,?,?)`,
@@ -103,12 +102,12 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         server.displayName,
         server.address,
         server.port,
-        position,
+        nextPos,
       );
 
       addedServer = {
         id: lastInsertRowId,
-        position,
+        position: nextPos,
         ...server,
       };
 
@@ -173,17 +172,16 @@ export const ServerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const changePosition = React.useCallback(
     async (serverId: number, newPos: number) => {
       await db.withTransactionAsync(async () => {
-        const { oldPos } =
-          (await db.getFirstAsync<{ oldPos: number }>(
-            'SELECT position AS oldPos FROM server WHERE id = ?',
-            serverId,
-          )) ?? {};
+        const { oldPos } = (await db.getFirstAsync<{ oldPos: number }>(
+          'SELECT position AS oldPos FROM server WHERE id = ?',
+          serverId,
+        )) ?? { oldPos: null };
 
-        if (!oldPos) throw new Error('Server not found');
+        if (oldPos === null) throw new Error('Server not found');
 
         const { cnt } = (await db.getFirstAsync<{ cnt: number }>('SELECT COUNT(*) AS cnt FROM server')) ?? { cnt: 0 };
 
-        newPos = Math.max(1, Math.min(newPos, cnt));
+        newPos = Math.max(0, Math.min(newPos, cnt));
         if (newPos === oldPos) return; // nothing to do
 
         /* ── 2. shift the block that lies between oldPos & newPos ── */

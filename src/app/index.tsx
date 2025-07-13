@@ -51,6 +51,7 @@ const Index = () => {
         {servers !== null ? (
           <NestableDraggableFlatList
             data={Object.values(servers)}
+            activationDistance={99999} // Temporarily disable dragging (TODO: fix dragging)
             onDragBegin={() => setDragging(true)}
             onDragEnd={({ data, from, to }) => {
               setDragging(false);
