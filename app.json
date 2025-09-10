@@ -3,7 +3,7 @@
     "name": "Game Server Status",
     "slug": "game-server-status",
     "scheme": "game-server-status",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",

@@ -1,6 +1,6 @@
 {
   "name": "game-server-status",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "expo-router/entry",
   "scripts": {
     "android": "expo run:android",
@@ -24,13 +24,13 @@
     "fast-text-encoding": "^1.0.6",
     "nativewind": "^4.1.23",
     "react": "19.0.0",
-    "react-native": "0.79.4",
+    "react-native": "0.79.5",
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-gesture-handler": "2.24.0",
     "react-native-reanimated": "~3.17.4",
     "react-native-root-toast": "^4.0.1",
     "react-native-safe-area-context": "5.4.0",
-    "react-native-screens": "^4.11.0",
+    "react-native-screens": "~4.11.0",
     "react-native-svg": "15.11.2",
     "react-native-tcp-socket": "^6.3.0",
     "react-native-udp": "^4.1.7"
@@ -51,7 +51,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3"
+    "typescript": "~5.8.3"
   },
   "private": true
 }
