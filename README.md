@@ -46,7 +46,6 @@ If you have a device connected and ADB is running, you can start the app by pres
 > [!NOTE]
 > This command will start the app via an ngrok tunnel
 
-
 ## Expo Go (does not work with native modules (like the TCP or UDP clients))
 
 ```bash

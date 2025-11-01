@@ -14,30 +14,30 @@ import '../../global.css';
 // This is the main layout of the app
 // It wraps your pages with the providers they need
 const RootLayout = () => {
-  return (
-    <SafeAreaProvider>
-      <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrateDbIfNeeded}>
-        <ServerProvider>
-          <RootSiblingParent>
-            <GestureHandlerRootView>
-              {/*
+    return (
+        <SafeAreaProvider>
+            <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrateDbIfNeeded}>
+                <ServerProvider>
+                    <RootSiblingParent>
+                        <GestureHandlerRootView>
+                            {/*
 							The Stack component displays the current page.
 							It also allows you to configure your screens 
 						*/}
-              <Stack
-                screenOptions={{
-                  headerStyle: {
-                    backgroundColor: '#17191f',
-                  },
-                }}
-              />
-              <StatusBar translucent={false} />
-            </GestureHandlerRootView>
-          </RootSiblingParent>
-        </ServerProvider>
-      </SQLiteProvider>
-    </SafeAreaProvider>
-  );
+                            <Stack
+                                screenOptions={{
+                                    headerStyle: {
+                                        backgroundColor: '#17191f',
+                                    },
+                                }}
+                            />
+                            <StatusBar translucent={false} />
+                        </GestureHandlerRootView>
+                    </RootSiblingParent>
+                </ServerProvider>
+            </SQLiteProvider>
+        </SafeAreaProvider>
+    );
 };
 
 export default RootLayout;

@@ -1,1 +1,3 @@
-export const GRASS_BLOCK = require('./grass-block.png');
+import GRASS_BLOCK from './grass-block.png';
+
+export { GRASS_BLOCK };

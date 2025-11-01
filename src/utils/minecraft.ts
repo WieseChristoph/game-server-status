@@ -4,84 +4,107 @@ import MinecraftServer from '~/types/MinecraftServer';
 import { readVarInt } from './helper';
 
 export function queryMinecraftServer(host: string, port = 25565, timeoutMs = 5000) {
-  return new Promise<MinecraftServer>((resolve, reject) => {
-    let ping = -1;
-    const pingStart = Date.now();
+    return new Promise<MinecraftServer>((resolve, reject) => {
+        let ping = -1;
+        const pingStart = Date.now();
 
-    const socket = TcpSocket.createConnection({ port, host }, () => {
-      ping = Date.now() - pingStart;
+        const socket = TcpSocket.createConnection({ port, host }, () => {
+            ping = Date.now() - pingStart;
 
-      const hostHexArray = Buffer.from(host, 'utf8')
-        .toString('hex')
-        .match(/.{1,2}/g)
-        ?.map((hex) => `0x${hex.padStart(2, '0')}`);
+            const hostHexArray = Buffer.from(host, 'utf8')
+                .toString('hex')
+                .match(/.{1,2}/g)
+                ?.map((hex) => `0x${hex.padStart(2, '0')}`);
 
-      const portHexArray = port
-        .toString(16)
-        .match(/.{1,2}/g)
-        ?.map((hex) => `0x${hex.padStart(2, '0')}`);
+            const portHexArray = port
+                .toString(16)
+                .match(/.{1,2}/g)
+                ?.map((hex) => `0x${hex.padStart(2, '0')}`);
 
-      const statusRequestBuffer = Buffer.from(
-        [
-          // https://wiki.vg/Protocol#Handshaking
-          `0x${(6 + host.length).toString(16)}`, // Length of packet id + data
-          0x00, // Packet id
-          0x04, // Protocol version
-          `0x${host.length.toString(16).padStart(2, '0')}`, // Host length
-          hostHexArray, // Host
-          portHexArray, // Port
-          0x01, // Next state: status
-          // https://wiki.vg/Protocol#Status
-          0x01,
-          0x00,
-        ].flat(),
-      );
+            const statusRequestBuffer = Buffer.from(
+                [
+                    // https://wiki.vg/Protocol#Handshaking
+                    `0x${(6 + host.length).toString(16)}`, // Length of packet id + data
+                    0x00, // Packet id
+                    0x04, // Protocol version
+                    `0x${host.length.toString(16).padStart(2, '0')}`, // Host length
+                    hostHexArray, // Host
+                    portHexArray, // Port
+                    0x01, // Next state: status
+                    // https://wiki.vg/Protocol#Status
+                    0x01,
+                    0x00,
+                ].flat(),
+            );
 
-      socket.write(statusRequestBuffer);
+            socket.write(statusRequestBuffer);
+        });
+
+        socket.setTimeout(timeoutMs);
+
+        socket.on('error', (err) => {
+            socket.destroy();
+            reject(err);
+        });
+
+        socket.on('timeout', () => {
+            socket.destroy();
+            reject(new Error('Socket timeout'));
+        });
+
+        let bytesToRead = -1;
+        let fullData = '';
+
+        socket.on('data', (data) => {
+            if (bytesToRead === -1) {
+                const { value } = readVarInt(data as Buffer);
+                bytesToRead = value;
+            }
+
+            fullData += data.toString();
+
+            if (socket.bytesRead >= bytesToRead) {
+                socket.destroy();
+            }
+        });
+
+        socket.on('close', () => {
+            if (fullData.length === 0) {
+                reject(new Error('No data received'));
+                return;
+            }
+
+            try {
+                const serverInfo = extractFirstJsonObject(fullData) as MinecraftServer;
+                serverInfo.ping = ping;
+
+                resolve(serverInfo);
+            } catch (err) {
+                reject(err);
+            }
+        });
     });
+}
 
-    socket.setTimeout(timeoutMs);
+function extractFirstJsonObject(str: string) {
+    const start = str.indexOf('{');
+    if (start === -1) return null;
 
-    socket.on('error', (err) => {
-      socket.destroy();
-      reject(err);
-    });
+    let depth = 0;
+    for (let i = start; i < str.length; i++) {
+        const c = str[i];
+        if (c === '{') depth++;
+        else if (c === '}') depth--;
 
-    socket.on('timeout', () => {
-      socket.destroy();
-      reject(new Error('Socket timeout'));
-    });
+        if (depth === 0) {
+            const candidate = str.slice(start, i + 1);
+            try {
+                return JSON.parse(candidate);
+            } catch {
+                // continue searching if it wasn't valid JSON
+            }
+        }
+    }
 
-    let bytesToRead = -1;
-    let fullData = '';
-
-    socket.on('data', (data) => {
-      if (bytesToRead === -1) {
-        const { value } = readVarInt(data as Buffer);
-        bytesToRead = value;
-      }
-
-      fullData += data.toString();
-
-      if (socket.bytesRead >= bytesToRead) {
-        socket.destroy();
-      }
-    });
-
-    socket.on('close', () => {
-      if (fullData.length === 0) {
-        reject(new Error('No data received'));
-        return;
-      }
-
-      try {
-        const serverInfo = JSON.parse(fullData.slice(fullData.indexOf('{'))) as MinecraftServer;
-        serverInfo.ping = ping;
-
-        resolve(serverInfo);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  });
+    return null;
 }

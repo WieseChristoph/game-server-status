@@ -3,12 +3,12 @@ import React from 'react';
 import ServerContext from '~/context/ServerContext';
 
 const useServer = () => {
-  const serverContext = React.useContext(ServerContext);
-  if (!serverContext) {
-    throw new Error('useServer must be used inside a ServerProvider');
-  }
+    const serverContext = React.useContext(ServerContext);
+    if (!serverContext) {
+        throw new Error('useServer must be used inside a ServerProvider');
+    }
 
-  return serverContext;
+    return serverContext;
 };
 
 export default useServer;

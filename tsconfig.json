@@ -1,28 +1,14 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true,
-    "baseUrl": "./",
-    "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+    "extends": "expo/tsconfig.base",
+    "compilerOptions": {
+        "strict": true,
+        "baseUrl": "./",
+        "paths": {
+            "~/*": ["./src/*"]
+        },
+        "jsx": "react-native",
+        "types": ["nativewind/types", "webpack-env"]
     },
-    "jsx": "react-native",
-    "types": [
-      "nativewind/types",
-      "webpack-env"
-    ]
-  },
-  "include": [
-    "src",
-    "*.ts",
-    "**/*.js",
-    "index.tsx",
-    "nativewind-env.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "*.config.js"
-  ]
+    "include": ["src", "*.ts", "**/*.js", "index.tsx", "nativewind-env.d.ts"],
+    "exclude": ["node_modules", "*.config.js"]
 }
